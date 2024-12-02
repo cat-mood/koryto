@@ -28,7 +28,7 @@ services:
                -c wal_buffers=16MB
                -c default_statistics_target=100
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U admin -d boot_learn" ]
+      test: [ "CMD-SHELL", "pg_isready -U admin -d koryto" ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -42,7 +42,7 @@ services:
     #      - postgres
     depends_on:
       - postgres
-    image: catmood/boot_learn_spring_boot
+    image: koryto_web
     ports:
       - "8080:8080"
 
