@@ -26,11 +26,11 @@ public class RootController {
         return "home";
     }
 
-    @GetMapping("/crypt")
-    public String crypt(Model model, @RequestParam String password) {
-        model.addAttribute("password", passwordEncoder.encode(password));
-        return "crypt";
-    }
+//    @GetMapping("/crypt")
+//    public String crypt(Model model, @RequestParam String password) {
+//        model.addAttribute("password", passwordEncoder.encode(password));
+//        return "crypt";
+//    }
 
     @GetMapping("/register")
     public String register() {
