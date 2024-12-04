@@ -43,7 +43,9 @@ public class UserDAO {
                     city,
                     address,
                     post_index,
-                    car_id
+                    car_id,
+                    role,
+                    email
                 FROM
                     users
                 WHERE username='%s';
@@ -60,5 +62,51 @@ public class UserDAO {
         }
 
         return Optional.of(user);
+    }
+
+    public void insertUser(User user) {
+        String query = """
+                INSERT INTO users (
+                    username,
+                    password,
+                    first_name,
+                    middle_name,
+                    last_name,
+                    birth_date,
+                    city,
+                    address,
+                    post_index,
+                    car_id,
+                    role,
+                    email
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+                """;
+        ResultSet rs = null;
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, user.getUsername());
+            stmt.setString(2, user.getPassword());
+            stmt.setString(3, user.getFirstName());
+            stmt.setString(4, user.getMiddleName());
+            stmt.setString(5, user.getLastName());
+            stmt.setDate(6, user.getBirthDate());
+            stmt.setString(7, user.getCity());
+            stmt.setString(8, user.getAddress());
+            if (user.getPostIndex() != null) {
+                stmt.setShort(9, user.getPostIndex());
+            } else {
+                stmt.setNull(9, Types.SMALLINT);
+            }
+            if (user.getCarId() != null) {
+                stmt.setLong(10, user.getCarId());
+            } else {
+                stmt.setNull(10, Types.BIGINT);
+            }
+            stmt.setString(11, user.getRole());
+            stmt.setString(12, user.getEmail());
+            int rows = stmt.executeUpdate();
+            log.info(rows + " rows inserted");
+        } catch (SQLException e) {
+            log.error("UserDAO insertUser: " + e.getMessage());
+        }
     }
 }

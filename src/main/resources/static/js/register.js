@@ -1,52 +1,53 @@
-document.getElementById('registerForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    // Validate passwords match
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-
-    if (password !== confirmPassword) {
-        alert('Passwords do not match!');
-        return;
-    }
-
-    // Collect form data
-    const formData = {
-        firstName: document.getElementById('firstName').value,
-        middleName: document.getElementById('middleName').value,
-        lastName: document.getElementById('lastName').value,
-        email: document.getElementById('email').value,
-        birthDate: document.getElementById('birthDate').value,
-        city: document.getElementById('city').value,
-        address: document.getElementById('address').value,
-        postIndex: document.getElementById('postIndex').value,
-        carBrand: document.getElementById('carBrand').value,
-        carModel: document.getElementById('carModel').value,
-        password: password
-    };
-
-    // Send registration request
-    fetch('https://api.autopartspro.com/auth/register', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Registration successful! Please check your email to verify your account.');
-                window.location.href = 'https://autopartspro.com/login';
-            } else {
-                alert(data.message || 'Registration failed. Please try again.');
-            }
-        })
-        .catch(error => {
-            console.error('Registration error:', error);
-            alert('An error occurred during registration. Please try again.');
-        });
-});
+// document.getElementById('registerForm').addEventListener('submit', function(e) {
+//     e.preventDefault();
+//
+//     // Validate passwords match
+//     const password = document.getElementById('password').value;
+//     const confirmPassword = document.getElementById('confirmPassword').value;
+//
+//     if (password !== confirmPassword) {
+//         alert('Passwords do not match!');
+//         return;
+//     }
+//
+//     // Collect form data
+//     const formData = {
+//         firstName: document.getElementById('firstName').value,
+//         middleName: document.getElementById('middleName').value,
+//         lastName: document.getElementById('lastName').value,
+//         username: document.getElementById('username').value,
+//         email: document.getElementById('email').value,
+//         birthDate: document.getElementById('birthDate').value,
+//         city: document.getElementById('city').value,
+//         address: document.getElementById('address').value,
+//         postIndex: document.getElementById('postIndex').value,
+//         carBrand: document.getElementById('carBrand').value,
+//         carModel: document.getElementById('carModel').value,
+//         password: password
+//     };
+//
+//     // Send registration request
+//     fetch('/register', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(formData)
+//     })
+//         .then(response => response.json())
+//         .then(data => {
+//             if (data.success) {
+//                 alert('Registration successful! Please check your email to verify your account.');
+//                 window.location.href = '/login';
+//             } else {
+//                 alert(data.message || 'Registration failed. Please try again.');
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Registration error:', error);
+//             alert('An error occurred during registration. Please try again.');
+//         });
+// });
 
 // Dynamic car models based on brand selection (can be expanded)
 const carModels = {
