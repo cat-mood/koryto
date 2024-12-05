@@ -80,17 +80,17 @@ public class UserDAO {
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
-            if (user.getFirstName() != null) {
+            if (user.getFirstName() != null && !user.getFirstName().isEmpty()) {
                 stmt.setString(3, user.getFirstName());
             } else {
                 stmt.setNull(3, Types.VARCHAR);
             }
-            if (user.getMiddleName() != null) {
+            if (user.getMiddleName() != null && !user.getMiddleName().isEmpty()) {
                 stmt.setString(4, user.getMiddleName());
             } else {
                 stmt.setNull(4, Types.VARCHAR);
             }
-            if (user.getLastName() != null) {
+            if (user.getLastName() != null && !user.getLastName().isEmpty()) {
                 stmt.setString(5, user.getLastName());
             } else {
                 stmt.setNull(5, Types.VARCHAR);
@@ -100,12 +100,12 @@ public class UserDAO {
             } else {
                 stmt.setNull(6, Types.DATE);
             }
-            if (user.getCity() != null) {
+            if (user.getCity() != null && !user.getCity().isEmpty()) {
                 stmt.setString(7, user.getCity());
             } else {
                 stmt.setNull(7, Types.VARCHAR);
             }
-            if (user.getAddress() != null) {
+            if (user.getAddress() != null && !user.getAddress().isEmpty()) {
                 stmt.setString(8, user.getAddress());
             } else {
                 stmt.setNull(8, Types.VARCHAR);

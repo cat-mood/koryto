@@ -29,10 +29,9 @@ public class CarDAO {
 
         String query = """
                 SELECT
-                DISTINCT
-                car_brand
+                car_brand_name
                 FROM
-                cars;
+                car_brands;
                 """;
 
         try (Statement statement = connection.createStatement()) {
@@ -52,10 +51,10 @@ public class CarDAO {
 
         String query = """
                 SELECT
-                car_model
+                car_model_name
                 FROM
-                cars
-                WHERE car_brand = ?;
+                cars_view
+                WHERE car_brand_name = ?;
                 """;
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
