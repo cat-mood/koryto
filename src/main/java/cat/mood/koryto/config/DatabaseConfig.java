@@ -13,4 +13,13 @@ public class DatabaseConfig {
     private String user;
     private String password;
     private String port;
+
+    public String getURL() {
+        return "jdbc:postgresql://"
+                + host
+                + ":"
+                + port
+                + "/"
+                + name;
+    }
 }

@@ -18,12 +18,7 @@ public class UserDAO {
     @Autowired
     public UserDAO(DatabaseConfig config) {
         try {
-            String url = "jdbc:postgresql://"
-                    + config.getHost()
-                    + ":"
-                    + config.getPort()
-                    + "/"
-                    + config.getName();
+            String url = config.getURL();
             connection = DriverManager.getConnection(url, config.getUser(), config.getPassword());
         } catch (SQLException e) {
             log.error("UserDAO constructor: {}", e.getMessage());
