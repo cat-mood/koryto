@@ -85,12 +85,36 @@ public class UserDAO {
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
-            stmt.setString(3, user.getFirstName());
-            stmt.setString(4, user.getMiddleName());
-            stmt.setString(5, user.getLastName());
-            stmt.setDate(6, user.getBirthDate());
-            stmt.setString(7, user.getCity());
-            stmt.setString(8, user.getAddress());
+            if (user.getFirstName() != null) {
+                stmt.setString(3, user.getFirstName());
+            } else {
+                stmt.setNull(3, Types.VARCHAR);
+            }
+            if (user.getMiddleName() != null) {
+                stmt.setString(4, user.getMiddleName());
+            } else {
+                stmt.setNull(4, Types.VARCHAR);
+            }
+            if (user.getLastName() != null) {
+                stmt.setString(5, user.getLastName());
+            } else {
+                stmt.setNull(5, Types.VARCHAR);
+            }
+            if (user.getBirthDate() != null) {
+                stmt.setDate(6, user.getBirthDate());
+            } else {
+                stmt.setNull(6, Types.DATE);
+            }
+            if (user.getCity() != null) {
+                stmt.setString(7, user.getCity());
+            } else {
+                stmt.setNull(7, Types.VARCHAR);
+            }
+            if (user.getAddress() != null) {
+                stmt.setString(8, user.getAddress());
+            } else {
+                stmt.setNull(8, Types.VARCHAR);
+            }
             if (user.getPostIndex() != null) {
                 stmt.setShort(9, user.getPostIndex());
             } else {
@@ -102,7 +126,11 @@ public class UserDAO {
                 stmt.setNull(10, Types.BIGINT);
             }
             stmt.setString(11, user.getRole());
-            stmt.setString(12, user.getEmail());
+            if (user.getEmail() != null) {
+                stmt.setString(12, user.getEmail());
+            } else {
+                stmt.setNull(12, Types.VARCHAR);
+            }
             int rows = stmt.executeUpdate();
             log.info(rows + " rows inserted");
         } catch (SQLException e) {
