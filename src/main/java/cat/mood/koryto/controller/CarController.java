@@ -1,6 +1,6 @@
 package cat.mood.koryto.controller;
 
-import cat.mood.koryto.repository.CarDAO;
+import cat.mood.koryto.service.CarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,15 +13,15 @@ import java.util.List;
 @RequestMapping("/api/cars")
 @RequiredArgsConstructor
 public class CarController {
-    final CarDAO carDAO;
+    final CarService carService;
 
     @GetMapping("/brands")
     public List<String> getBrands() {
-        return carDAO.getAllBrands();
+        return carService.getAllBrands();
     }
 
     @GetMapping("/models")
     public List<String> getModelsByBrand(@RequestParam String brand) {
-        return carDAO.getModelsByBrand(brand);
+        return carService.getModelsByBrand(brand);
     }
 }

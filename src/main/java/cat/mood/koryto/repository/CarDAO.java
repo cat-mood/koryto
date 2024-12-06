@@ -2,6 +2,7 @@ package cat.mood.koryto.repository;
 
 import cat.mood.koryto.config.DatabaseConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -13,6 +14,7 @@ import java.util.List;
 public class CarDAO {
     Connection connection;
 
+    @Autowired
     public CarDAO(DatabaseConfig databaseConfig) {
         String url = databaseConfig.getURL();
         try {

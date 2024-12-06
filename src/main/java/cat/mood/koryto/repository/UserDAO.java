@@ -43,14 +43,28 @@ public class UserDAO {
                     email
                 FROM
                     users
-                WHERE username='%s';
+                WHERE username=?;
                 """;
-        ResultSet rs = null;
         User user;
-        try (Statement stmt = connection.createStatement()) {
-            rs = stmt.executeQuery(String.format(query, username));
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
             rs.next();
-            user = new User(rs);
+            user = new User(
+                    rs.getLong("user_id"),
+                    rs.getString("username"),
+                    rs.getString("password"),
+                    rs.getString("first_name"),
+                    rs.getString("middle_name"),
+                    rs.getString("last_name"),
+                    rs.getDate("birth_date"),
+                    rs.getString("city"),
+                    rs.getString("address"),
+                    rs.getShort("post_index"),
+                    rs.getLong("car_id"),
+                    rs.getString("role"),
+                    rs.getString("email")
+            );
         } catch (SQLException e) {
             log.error("UserDAO getUserByUsername: " + e.getMessage());
             return Optional.empty();

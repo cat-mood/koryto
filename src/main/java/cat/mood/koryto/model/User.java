@@ -49,22 +49,6 @@ public class User implements UserDetails {
     String role;
     String email;
 
-    public User(ResultSet rs) throws SQLException {
-        userId = rs.getLong("user_id");
-        username = rs.getString("username");
-        password = rs.getString("password");
-        firstName = rs.getString("first_name");
-        middleName = rs.getString("middle_name");
-        lastName = rs.getString("last_name");
-        birthDate = rs.getDate("birth_date");
-        city = rs.getString("city");
-        address = rs.getString("address");
-        postIndex = rs.getShort("post_index");
-        carId = rs.getLong("car_id");
-        role = rs.getString("role");
-        email = rs.getString("email");
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role);

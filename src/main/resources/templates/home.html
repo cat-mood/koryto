@@ -1,16 +1,94 @@
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Home Page</title>
+<html><head><base href="." /><title>Koryto - Home</title>
+    <link rel="stylesheet" type="text/css" href="/css/home.css">
 </head>
 <body>
-<h1>Hello World!</h1>
 
-<tr th:each="user : ${users}">
-    <td th:text="${user}">...</td>
-</tr>
+<header>
+    <div class="header-content">
+        <svg class="logo" viewBox="0 0 200 60">
+            <text x="30" y="40" fill="#e63946" font-size="30" font-weight="bold">Корыто</text>
+        </svg>
 
-<a href="/logout">Logout</a>
-</body>
-</html>
+        <div class="account-section">
+            <a href="/account" class="account-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+                My Account
+            </a>
+            <button class="cart-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#1d3557">
+                    <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+                </svg>
+                <span class="cart-count">0</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+    <section>
+        <h2 class="section-title">Recommended for You</h2>
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-image">
+                    <svg width="100" height="100" viewBox="0 0 24 24" fill="#1d3557">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                    </svg>
+                </div>
+                <div class="product-details">
+                    <h3>Brake Pads - Toyota Camry</h3>
+                    <p class="product-price">$49.99</p>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+            <!-- More recommended products -->
+            <div class="product-card">
+                <div class="product-image">
+                    <svg width="100" height="100" viewBox="0 0 24 24" fill="#1d3557">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                    </svg>
+                </div>
+                <div class="product-details">
+                    <h3>Oil Filter - Premium</h3>
+                    <p class="product-price">$12.99</p>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <svg width="100" height="100" viewBox="0 0 24 24" fill="#1d3557">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                    </svg>
+                </div>
+                <div class="product-details">
+                    <h3>Spark Plugs Set</h3>
+                    <p class="product-price">$24.99</p>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">Popular Products</h2>
+        <div class="products-grid">
+            <div th:each="part:${parts}" class="product-card">
+                <div class="product-image">
+                    <svg width="100" height="100" viewBox="0 0 24 24" fill="#1d3557">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                    </svg>
+                </div>
+                <div class="product-details">
+                    <h3 th:text="${part.getPartName()}">Product Name</h3>
+<!--                    <p th:text="${part.price}" class="product-price">$19.99</p>-->
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script src="/js/home.js"></script>
+
+</body></html>

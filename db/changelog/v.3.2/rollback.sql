@@ -1,0 +1,21 @@
+DELETE FROM parts
+WHERE part_name = 'Timing Belt' AND
+      part_name = 'Battery' AND
+      part_name = 'Brake Caliper' AND
+      part_name = 'Fuel Injector' AND
+      part_name = 'Headlight Bulb' AND
+      part_name = 'Wheel Bearing' AND
+      part_name = 'Oxygen Sensor' AND
+      part_name = 'Radiator' AND
+      part_name = 'Tailpipe' AND
+      part_name = 'Strut Mount' AND
+      part_name = 'Ignition Coil' AND
+      part_name = 'Fuel Pump' AND
+      part_name = 'Control Arm' AND
+      part_name = 'ABS Sensor' AND
+      part_name = 'Turbocharger' AND
+      part_name = 'EGR Valve' AND
+      part_name = 'Rearview Mirror' AND
+      part_name = 'Brake Hose' AND
+      part_name = 'Leaf Spring' AND
+      part_name = 'Clutch Disc';

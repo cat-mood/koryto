@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @Slf4j
 public class Car {
-    Long car_id;
-    String car_brand;
-    String car_model;
+    Long carId;
+    String carBrand;
+    String carModel;
 }
