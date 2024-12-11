@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @AllArgsConstructor
 @NoArgsConstructor
-public class Part {
+public class Part implements Comparable<Part> {
     @NotBlank
     String partName;
     String categoryName;
@@ -20,4 +20,14 @@ public class Part {
     String carBrandName;
     String carModelName;
     String partDescription;
+    Integer partId;
+    Integer categoryId;
+    Integer manufacturerId;
+    Integer carBrandId;
+    Integer carModelId;
+
+    @Override
+    public int compareTo(Part o) {
+        return this.partId.compareTo(o.partId);
+    }
 }

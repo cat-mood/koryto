@@ -1,13 +1,74 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Admin Page</title>
+<html><head><base href="." />
+    <title>Koryto - Admin Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="/css/admin.css">
 </head>
 <body>
-    <p>Admin Only</p>
-</body>
-</html>
+
+<div class="sidebar">
+    <div class="logo-container">
+        <svg class="logo" viewBox="0 0 200 60">
+            <text x="10" y="40" fill="#e63946" font-size="30" font-weight="bold">Koryto</text>
+        </svg>
+    </div>
+    <div class="nav-item active" data-panel="products">Parts Management</div>
+    <div class="nav-item" data-panel="users">Users Management</div>
+</div>
+
+<div class="main-content">
+    <div id="products" class="panel active">
+        <h2>Products Management</h2>
+        <button class="btn btn-primary" onclick="showAddProductModal()">Add New Product</button>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="productsTable">
+                <tr th:each="part:${parts}">
+                    <td th:text="${part.getPartId()}">Part id</td>
+                    <td>
+                        <span class="product-name" th:text="${part.getPartName()}">Part Name</span>
+                        <input type="text" class="edit-name" style="display: none" value="${product.name}">
+                    </td>
+                    <td>
+                        <span class="product-price">${part.price}</span>
+                        <input type="number" step="0.01" class="edit-price" style="display: none" value="${product.price}">
+                    </td>
+                    <td th:text="${part.getCategoryName()}">Category Name</td>
+                    <td>
+                        <button class="btn btn-primary" onclick="editProduct(${part.id})">Edit</button>
+                        <button class="btn btn-danger" onclick="deleteProduct(${part.id})">Delete</button>
+                        <button class="btn btn-primary save-btn" style="display: none" onclick="saveProduct(${part.id})">Save</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="users" class="panel">
+        <h2>Users Management</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="usersTable">
+            <!-- Users will be loaded here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="/js/admin.js"></script>
+
+</body></html>
