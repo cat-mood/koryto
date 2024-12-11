@@ -36,7 +36,7 @@
                         <input type="text" class="edit-name" style="display: none" value="${product.name}">
                     </td>
                     <td>
-                        <span class="product-price">${part.price}</span>
+                        <span class="product-price" th:text="${part.getPrice()}">Part price</span>
                         <input type="number" step="0.01" class="edit-price" style="display: none" value="${product.price}">
                     </td>
                     <td th:text="${part.getCategoryName()}">Category Name</td>

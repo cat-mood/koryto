@@ -1,0 +1,2 @@
+ALTER TABLE parts
+ADD COLUMN price INTEGER NOT NULL default 0;

@@ -25,6 +25,7 @@ public class Part implements Comparable<Part> {
     Integer manufacturerId;
     Integer carBrandId;
     Integer carModelId;
+    Integer price;
 
     @Override
     public int compareTo(Part o) {

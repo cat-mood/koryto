@@ -48,7 +48,8 @@ public class PartDAO {
                     category_id,
                     manufacturer_id,
                     car_brand_id,
-                    car_model_id
+                    car_model_id,
+                    price
                 FROM
                     parts_view;
                 """;
@@ -68,7 +69,8 @@ public class PartDAO {
                         resultSet.getInt("category_id"),
                         resultSet.getInt("manufacturer_id"),
                         resultSet.getInt("car_brand_id"),
-                        resultSet.getInt("car_model_id")
+                        resultSet.getInt("car_model_id"),
+                        resultSet.getInt("price")
                 );
                 parts.add(part);
             }
