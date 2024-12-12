@@ -41,9 +41,9 @@
                     </td>
                     <td th:text="${part.getCategoryName()}">Category Name</td>
                     <td>
-                        <button class="btn btn-primary" onclick="editProduct(${part.id})">Edit</button>
-                        <button class="btn btn-danger" onclick="deleteProduct(${part.id})">Delete</button>
-                        <button class="btn btn-primary save-btn" style="display: none" onclick="saveProduct(${part.id})">Save</button>
+<!--                        <button class="btn btn-primary" onclick="editProduct(${part.id})">Edit</button>-->
+<!--                        <button class="btn btn-danger" onclick="deleteProduct(${part.id})">Delete</button>-->
+<!--                        <button class="btn btn-primary save-btn" style="display: none" onclick="saveProduct(${part.id})">Save</button>-->
                     </td>
                 </tr>
             </tbody>
@@ -66,6 +66,57 @@
             <!-- Users will be loaded here -->
             </tbody>
         </table>
+    </div>
+</div>
+
+<!-- Update Add New Product Modal structure -->
+<div id="addProductModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Add New Product</h2>
+            <span class="close" onclick="closeAddProductModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="addProductForm" onsubmit="handleAddProduct(event)">
+                <div class="form-group">
+                    <label for="partName">Part Name</label>
+                    <input type="text" id="partName" required>
+                </div>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="category" required>
+                        <option value="">Select Category</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="manufacturer">Manufacturer</label>
+                    <select id="manufacturer" required>
+                        <option value="">Select Manufacturer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="carBrand">Car Brand</label>
+                    <select id="carBrand" required onchange="fetchModels()">
+                        <option value="">Select Brand</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="carModel">Car Model</label>
+                    <select id="carModel" required>
+                        <option value="">Select Car Brand First</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="price">Price ($)</label>
+                    <input type="number" id="price" step="0.01" min="0" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Product</button>
+            </form>
+        </div>
     </div>
 </div>
 
