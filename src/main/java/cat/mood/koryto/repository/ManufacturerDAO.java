@@ -28,7 +28,7 @@ public class ManufacturerDAO {
         }
     }
 
-    public List<Manufacturer> getAllManufacturers() {
+    public List<Manufacturer> getAll() {
         List<Manufacturer> manufacturers = new ArrayList<>();
         String query = """
                 SELECT
@@ -54,9 +54,41 @@ public class ManufacturerDAO {
                 manufacturers.add(manufacturer);
             }
         } catch (SQLException e) {
-            log.error("ManufacturerDAO: getAllManufacturers(): " + e.getMessage());
+            log.error("ManufacturerDAO: getAll(): " + e.getMessage());
         }
 
         return manufacturers;
+    }
+
+    public Manufacturer getByName(String name) {
+        Manufacturer manufacturer = null;
+        String query = """
+                SELECT
+                    manufacturer_id,
+                    manufacturer_name,
+                    manufacturer_address,
+                    manufacturer_phone_number
+                FROM
+                    manufacturers
+                WHERE manufacturer_name = ?;
+                """;
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, name);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                manufacturer = new Manufacturer(
+                        resultSet.getInt("manufacturer_id"),
+                        resultSet.getString("manufacturer_name"),
+                        resultSet.getString("manufacturer_address"),
+                        resultSet.getString("manufacturer_phone_number")
+                );
+            }
+        } catch (SQLException e) {
+            log.error("ManufacturerDAO: getByName(): " + e.getMessage());
+        }
+
+        return manufacturer;
     }
 }

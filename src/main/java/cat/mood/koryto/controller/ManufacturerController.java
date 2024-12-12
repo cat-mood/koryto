@@ -17,6 +17,6 @@ public class ManufacturerController {
 
     @GetMapping
     public List<Manufacturer> getAllManufacturers() {
-        return service.getAllManufacturers();
+        return service.getAll();
     }
 }

@@ -1,6 +1,7 @@
 package cat.mood.koryto.controller;
 
 import cat.mood.koryto.model.Part;
+import cat.mood.koryto.model.PartView;
 import cat.mood.koryto.service.PartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +19,7 @@ public class PartController {
     final PartService partService;
 
     @GetMapping
-    public List<Part> getParts() {
+    public List<PartView> getParts() {
         return partService.getAll();
     }
 }

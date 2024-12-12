@@ -14,7 +14,11 @@ import java.util.List;
 public class CategoryService {
     final CategoryDAO categoryDAO;
 
-    public List<Category> getAllCategories() {
-        return categoryDAO.getAllCategory();
+    public List<Category> getAll() {
+        return categoryDAO.getAll();
+    }
+
+    public Category getByName(String name) {
+        return categoryDAO.getByName(name);
     }
 }

@@ -162,21 +162,35 @@ function handleAddProduct(event) {
         price: parseFloat(document.getElementById('price').value)
     };
 
-    const response = fetch(
-        'http://localhost:8080/admin/add-product', {
+    console.log(newProduct);
+
+    fetch(
+        'http://localhost:8080/admin/add-part', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(newProduct)
         }
-    )
+    ).then(response => {
+        if (!response.ok) {
+            return response.text().then(errorMessage => {
+                alert('Add part error: ' + errorMessage);
+                throw new Error('Add part error: ' + errorMessage);
+            });
+        }
 
-    if (!response.ok) {
-        alert('Add part error!');
-    }
+        alert('Part added successfully!');
+        closeAddProductModal();
+        location.reload();
+    })
+        .catch(error => {
+            console.error('Error adding part: ', error);
+            alert('Failed to add part due to a network error.');
+        });
 
     closeAddProductModal();
+    location.reload();
 }
 
 function fetchModels() {

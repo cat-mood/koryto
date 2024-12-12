@@ -12,7 +12,11 @@ import java.util.List;
 public class ManufacturerService {
     final ManufacturerDAO manufacturerDAO;
 
-    public List<Manufacturer> getAllManufacturers() {
-        return manufacturerDAO.getAllManufacturers();
+    public List<Manufacturer> getAll() {
+        return manufacturerDAO.getAll();
+    }
+
+    public Manufacturer getByName(String name) {
+        return manufacturerDAO.getByName(name);
     }
 }

@@ -1,6 +1,7 @@
 package cat.mood.koryto.repository;
 
 import cat.mood.koryto.config.DatabaseConfig;
+import cat.mood.koryto.model.Car;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -70,5 +71,41 @@ public class CarDAO {
         }
 
         return models;
+    }
+
+    public Car getCarByBrandAndModel(String brand, String model) {
+        Car car = null;
+        String query = """
+                SELECT
+                    car_brand_name,
+                    car_model_name,
+                    car_brand_id,
+                    car_model_id,
+                    car_id
+                FROM
+                    cars_view
+                WHERE car_brand_name = ? AND car_model_name = ?;
+                """;
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, brand);
+            statement.setString(2, model);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                car = new Car(
+                        resultSet.getInt("car_id"),
+                        resultSet.getString("car_brand_name"),
+                        resultSet.getString("car_model_name")
+                );
+            } else {
+                log.info("Car getCarByBrandAndModel: doesn't exist");
+            }
+        } catch (SQLException e) {
+            log.error("CarDAO getCarByBrandAndModel(): " + e.getMessage());
+        }
+
+        return car;
     }
 }

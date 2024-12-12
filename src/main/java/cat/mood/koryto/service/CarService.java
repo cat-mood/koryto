@@ -1,5 +1,6 @@
 package cat.mood.koryto.service;
 
+import cat.mood.koryto.model.Car;
 import cat.mood.koryto.repository.CarDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,5 +18,9 @@ public class CarService {
 
     public List<String> getModelsByBrand(String brand) {
         return carDAO.getModelsByBrand(brand);
+    }
+
+    public Car getCarByBrandAndModel(String brand, String model) {
+        return carDAO.getCarByBrandAndModel(brand, model);
     }
 }

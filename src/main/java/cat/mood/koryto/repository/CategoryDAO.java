@@ -29,7 +29,7 @@ public class CategoryDAO {
         }
     }
 
-    public List<Category> getAllCategory() {
+    public List<Category> getAll() {
         List<Category> categories = new ArrayList<>();
         String query = """
                 SELECT
@@ -53,5 +53,32 @@ public class CategoryDAO {
         }
 
         return categories;
+    }
+
+    public Category getByName(String name) {
+        Category category = null;
+        String query = """
+                SELECT
+                    category_id,
+                    category_name
+                FROM
+                    categories
+                WHERE category_name = ?;
+                """;
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, name);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                category = new Category(
+                        resultSet.getInt("category_id"),
+                        resultSet.getString("category_name")
+                );
+            }
+        } catch (SQLException e) {
+            log.error("CategoryDAO: getByName(): " + e.getMessage());
+        }
+
+        return category;
     }
 }

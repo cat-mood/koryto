@@ -2,6 +2,7 @@ package cat.mood.koryto.repository;
 
 import cat.mood.koryto.config.DatabaseConfig;
 import cat.mood.koryto.model.Part;
+import cat.mood.koryto.model.PartView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -32,8 +33,8 @@ public class PartDAO {
         }
     }
 
-    public List<Part> getAll() {
-        List<Part> parts = new ArrayList<>();
+    public List<PartView> getAll() {
+        List<PartView> parts = new ArrayList<>();
         String query = """
                 SELECT
                     part_name,
@@ -56,7 +57,7 @@ public class PartDAO {
         try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
-                Part part = new Part(
+                PartView part = new PartView(
                         resultSet.getString("part_name"),
                         resultSet.getString("category_name"),
                         resultSet.getString("manufacturer_name"),
@@ -70,7 +71,7 @@ public class PartDAO {
                         resultSet.getInt("manufacturer_id"),
                         resultSet.getInt("car_brand_id"),
                         resultSet.getInt("car_model_id"),
-                        resultSet.getInt("price")
+                        resultSet.getDouble("price")
                 );
                 parts.add(part);
             }
@@ -79,5 +80,26 @@ public class PartDAO {
         }
 
         return parts;
+    }
+
+    public void add(Part part) {
+        String query = """
+                INSERT INTO parts (part_name, category_id, manufacturer_id, car_id, part_description, price) VALUES
+                (?, ?, ?, ?, ?, ?);
+                """;
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, part.getPartName());
+            statement.setInt(2, part.getCategoryId());
+            statement.setInt(3, part.getManufacturerId());
+            statement.setInt(4, part.getCarId());
+            statement.setString(5, part.getPartDescription());
+            statement.setDouble(6, part.getPrice());
+
+            int affectedRows = statement.executeUpdate();
+            log.info("PartDAO add(): affected rows: " + affectedRows);
+        } catch (SQLException e) {
+            log.error("PartDAO add(): " + e.getMessage());
+        }
     }
 }
