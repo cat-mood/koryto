@@ -12,33 +12,19 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PartView implements Comparable<PartView> {
-    @JsonProperty("partName")
     String partName;
-    @JsonProperty("categoryName")
     String categoryName;
-    @JsonProperty("manufacturerName")
     String manufacturerName;
-    @JsonProperty("manufacturerAddress")
     String manufacturerAddress;
-    @JsonProperty("manufacturerPhoneNumber")
     String manufacturerPhoneNumber;
-    @JsonProperty("carBrandName")
     String carBrandName;
-    @JsonProperty("carModelName")
     String carModelName;
-    @JsonProperty("partDescription")
     String partDescription;
-    @JsonProperty("partId")
     Integer partId;
-    @JsonProperty("categoryId")
     Integer categoryId;
-    @JsonProperty("manufacturerId")
     Integer manufacturerId;
-    @JsonProperty("carBrandId")
     Integer carBrandId;
-    @JsonProperty("carModelId")
     Integer carModelId;
-    @JsonProperty("price")
     Double price;
 
     @Override

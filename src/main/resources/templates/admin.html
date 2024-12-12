@@ -41,7 +41,7 @@
                     </td>
                     <td th:text="${part.getCategoryName()}">Category Name</td>
                     <td>
-<!--                        <button class="btn btn-primary" onclick="editProduct(${part.id})">Edit</button>-->
+                        <button class="btn btn-primary" th:attr="onclick=|showEditProductModal(${part.getPartId()})|">Edit</button>
 <!--                        <button class="btn btn-danger" onclick="deleteProduct(${part.id})">Delete</button>-->
 <!--                        <button class="btn btn-primary save-btn" style="display: none" onclick="saveProduct(${part.id})">Save</button>-->
                     </td>
@@ -115,6 +115,57 @@
                     <input type="number" id="price" step="0.01" min="0" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Add Product</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="editProductModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Edit Product</h2>
+            <span class="close" onclick="closeEditProductModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="editProductForm" onsubmit="handleEditProduct(event)">
+                <input type="hidden" id="editProductId">
+                <div class="form-group">
+                    <label for="editPartName">Part Name</label>
+                    <input type="text" id="editPartName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editCategory">Category</label>
+                    <select id="editCategory" required>
+                        <option value="">Select Category</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editManufacturer">Manufacturer</label>
+                    <select id="editManufacturer" required>
+                        <option value="">Select Manufacturer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editCarBrand">Car Brand</label>
+                    <select id="editCarBrand" required onchange="fetchEditModels()">
+                        <option value="">Select Brand</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editCarModel">Car Model</label>
+                    <select id="editCarModel" required>
+                        <option value="">Select Car Brand First</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editDescription">Description</label>
+                    <textarea id="editDescription" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editPrice">Price ($)</label>
+                    <input type="number" id="editPrice" step="0.01" min="0" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
             </form>
         </div>
     </div>

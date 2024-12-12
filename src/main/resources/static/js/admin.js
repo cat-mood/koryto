@@ -180,7 +180,6 @@ function handleAddProduct(event) {
             });
         }
 
-        alert('Part added successfully!');
         closeAddProductModal();
         location.reload();
     })
@@ -193,7 +192,7 @@ function handleAddProduct(event) {
     location.reload();
 }
 
-function fetchModels() {
+async function fetchModels() {
     const brand = document.getElementById("carBrand").value;
     const modelsDropdown = document.getElementById("carModel");
 
@@ -201,7 +200,7 @@ function fetchModels() {
     modelsDropdown.innerHTML = '<option value="">Выберите модель</option>';
 
     if (brand) {
-        fetch(`/api/cars/models?brand=${brand}`)
+        await fetch(`/api/cars/models?brand=${brand}`)
             .then(response => response.json())
             .then(models => {
                 models.forEach(model => {
@@ -214,3 +213,169 @@ function fetchModels() {
             .catch(error => console.error('Ошибка загрузки моделей:', error));
     }
 }
+
+async function fetchEditModels() {
+    const brand = document.getElementById("editCarBrand").value;
+    const modelsDropdown = document.getElementById("editCarModel");
+
+    // Очистка текущего списка моделей
+    modelsDropdown.innerHTML = '<option value="">Выберите модель</option>';
+
+    if (brand) {
+        await fetch(`/api/cars/models?brand=${brand}`)
+            .then(response => response.json())
+            .then(models => {
+                models.forEach(model => {
+                    const option = document.createElement("option");
+                    option.value = model;
+                    option.textContent = model;
+                    modelsDropdown.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Ошибка загрузки моделей:', error));
+    }
+}
+
+function closeEditProductModal() {
+    document.getElementById('editProductModal').style.display = 'none';
+    document.getElementById('editProductForm').reset();
+}
+
+function handleEditProduct(event) {
+    event.preventDefault();
+
+    const id = parseInt(document.getElementById('editProductId').value);
+
+    const updateProduct = {
+        partId: id,
+        partName: document.getElementById('partName').value,
+        categoryName: document.getElementById('category').value,
+        manufacturerName: document.getElementById('manufacturer').value,
+        carBrandName: document.getElementById('carBrand').value,
+        carModelName: document.getElementById('carModel').value,
+        partDescription: document.getElementById('description').value,
+        price: parseFloat(document.getElementById('price').value)
+    };
+
+    console.log(updateProduct);
+
+    fetch(
+        'http://localhost:8080/admin/update-part', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updateProduct)
+        }
+    ).then(response => {
+        if (!response.ok) {
+            return response.text().then(errorMessage => {
+                alert('Add part error: ' + errorMessage);
+                throw new Error('Add part error: ' + errorMessage);
+            });
+        }
+
+        closeEditProductModal();
+        location.reload();
+    })
+        .catch(error => {
+            console.error('Error adding part: ', error);
+            alert('Failed to add part due to a network error.');
+        });
+}
+
+async function showEditProductModal(id) {
+    const brandDropdown = document.getElementById("editCarBrand");
+
+    await fetch('/api/cars/brands')
+        .then(response => {
+            if (!response.ok) throw new Error("Ошибка загрузки брендов");
+            return response.json();
+        })
+        .then(brands => {
+            // Заполняем выпадающий список брендов
+            brandDropdown.innerHTML = '<option value="">Выберите бренд</option>';
+            console.log(typeof brands, brands);
+            brands.forEach(brand => {
+                const option = document.createElement("option");
+                option.value = brand;
+                option.textContent = brand;
+                brandDropdown.appendChild(option);
+                console.log(brand, typeof brand);
+            });
+        })
+        .catch(error => console.error('Ошибка:', error));
+
+    const categoryDropdown = document.getElementById("editCategory");
+
+    await fetch('/api/category')
+        .then(response => {
+            if (!response.ok) throw new Error("Ошибка загрузки категорий");
+            return response.json();
+        })
+        .then(categories => {
+            // Заполняем выпадающий список брендов
+            categoryDropdown.innerHTML = '<option value="">Выберите бренд</option>';
+            categories.forEach(category => {
+                const option = document.createElement("option");
+                option.value = category.categoryName;
+                option.textContent = category.categoryName;
+                categoryDropdown.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Ошибка:', error));
+
+    const manufacturerDropdown = document.getElementById("editManufacturer");
+
+    await fetch('/api/manufacturer')
+        .then(response => {
+            if (!response.ok) throw new Error("Ошибка загрузки категорий");
+            return response.json();
+        })
+        .then(manufacturers => {
+            // Заполняем выпадающий список брендов
+            manufacturerDropdown.innerHTML = '<option value="">Выберите бренд</option>';
+            manufacturers.forEach(manufacturer => {
+                const option = document.createElement("option");
+                option.value = manufacturer.manufacturerName;
+                option.textContent = manufacturer.manufacturerName;
+                manufacturerDropdown.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Ошибка:', error));
+
+    // Отправляем запрос на сервер для получения продукта по id
+    await fetch(`http://localhost:8080/api/part?id=${id}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch product details');
+            }
+            return response.json();
+        })
+        .then(async product => {
+            // Проверяем, получили ли мы данные о продукте
+            if (!product) return;
+
+            // Заполняем поля формы значениями продукта
+            document.getElementById('editProductId').value = id;
+            document.getElementById('editPartName').value = product.partName;
+            document.getElementById('editCategory').value = product.categoryName;
+            document.getElementById('editManufacturer').value = product.manufacturerName;
+            document.getElementById('editCarBrand').value = product.carBrandName;
+
+            await fetchEditModels(); // Обновляем выпадающий список моделей автомобилей
+
+            console.log(product.carModelName);
+            document.getElementById('editCarModel').value = product.carModelName;
+            document.getElementById('editDescription').value = product.partDescription;
+            document.getElementById('editPrice').value = product.price;
+
+            // Показываем модальное окно
+            document.getElementById('editProductModal').style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error fetching product details:', error);
+            alert('Failed to load product details. Please try again.');
+        });
+}
+

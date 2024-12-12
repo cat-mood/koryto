@@ -82,6 +82,58 @@ public class PartDAO {
         return parts;
     }
 
+    public PartView getById(int id) {
+        PartView part = null;
+        String query = """
+                SELECT
+                    part_name,
+                    category_name,
+                    manufacturer_name,
+                    manufacturer_address,
+                    manufacturer_phone_number,
+                    car_brand_name,
+                    car_model_name,
+                    part_description,
+                    part_id,
+                    category_id,
+                    manufacturer_id,
+                    car_brand_id,
+                    car_model_id,
+                    price
+                FROM
+                    parts_view
+                WHERE part_id = ?;
+                """;
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                part = new PartView(
+                        resultSet.getString("part_name"),
+                        resultSet.getString("category_name"),
+                        resultSet.getString("manufacturer_name"),
+                        resultSet.getString("manufacturer_address"),
+                        resultSet.getString("manufacturer_phone_number"),
+                        resultSet.getString("car_brand_name"),
+                        resultSet.getString("car_model_name"),
+                        resultSet.getString("part_description"),
+                        resultSet.getInt("part_id"),
+                        resultSet.getInt("category_id"),
+                        resultSet.getInt("manufacturer_id"),
+                        resultSet.getInt("car_brand_id"),
+                        resultSet.getInt("car_model_id"),
+                        resultSet.getDouble("price")
+                );
+            }
+        } catch (SQLException e) {
+            log.error("PartDAO getById(): " + e.getMessage());
+        }
+
+        return part;
+    }
+
     public void add(Part part) {
         String query = """
                 INSERT INTO parts (part_name, category_id, manufacturer_id, car_id, part_description, price) VALUES

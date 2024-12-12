@@ -7,19 +7,25 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/parts")
+@RequestMapping("/api/part")
 @Slf4j
 @RequiredArgsConstructor
 public class PartController {
     final PartService partService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<PartView> getParts() {
         return partService.getAll();
+    }
+
+    @GetMapping
+    public PartView getPart(@RequestParam int id) {
+        return partService.getById(id);
     }
 }

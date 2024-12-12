@@ -25,6 +25,10 @@ public class PartService {
         return dao.getAll();
     }
 
+    public PartView getById(int id) {
+        return dao.getById(id);
+    }
+
     public void add(PartView partView) {
         Category category = categoryService.getByName(partView.getCategoryName());
         Manufacturer manufacturer = manufacturerService.getByName(partView.getManufacturerName());
