@@ -37,4 +37,13 @@ public class AdminController {
 
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/update-part")
+    @ResponseBody
+    public ResponseEntity<Void> updatePart(@Valid @RequestBody PartView partView) {
+        log.info("updatePart(): category name: " + partView.getCategoryName());
+        partService.update(partView);
+
+        return ResponseEntity.ok().build();
+    }
 }

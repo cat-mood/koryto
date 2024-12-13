@@ -182,11 +182,7 @@ function handleAddProduct(event) {
 
         closeAddProductModal();
         location.reload();
-    })
-        .catch(error => {
-            console.error('Error adding part: ', error);
-            alert('Failed to add part due to a network error.');
-        });
+    });
 
     closeAddProductModal();
     location.reload();
@@ -248,13 +244,13 @@ function handleEditProduct(event) {
 
     const updateProduct = {
         partId: id,
-        partName: document.getElementById('partName').value,
-        categoryName: document.getElementById('category').value,
-        manufacturerName: document.getElementById('manufacturer').value,
-        carBrandName: document.getElementById('carBrand').value,
-        carModelName: document.getElementById('carModel').value,
-        partDescription: document.getElementById('description').value,
-        price: parseFloat(document.getElementById('price').value)
+        partName: document.getElementById('editPartName').value,
+        categoryName: document.getElementById('editCategory').value,
+        manufacturerName: document.getElementById('editManufacturer').value,
+        carBrandName: document.getElementById('editCarBrand').value,
+        carModelName: document.getElementById('editCarModel').value,
+        partDescription: document.getElementById('editDescription').value,
+        price: parseFloat(document.getElementById('editPrice').value)
     };
 
     console.log(updateProduct);
@@ -322,8 +318,7 @@ async function showEditProductModal(id) {
                 option.textContent = category.categoryName;
                 categoryDropdown.appendChild(option);
             });
-        })
-        .catch(error => console.error('Ошибка:', error));
+        });
 
     const manufacturerDropdown = document.getElementById("editManufacturer");
 

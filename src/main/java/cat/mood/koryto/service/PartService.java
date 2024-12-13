@@ -29,12 +29,13 @@ public class PartService {
         return dao.getById(id);
     }
 
-    public void add(PartView partView) {
+
+
+    Part toPart(PartView partView) {
         Category category = categoryService.getByName(partView.getCategoryName());
         Manufacturer manufacturer = manufacturerService.getByName(partView.getManufacturerName());
-        log.debug("car brand name: " + partView.getCarBrandName());
         Car car = carService.getCarByBrandAndModel(partView.getCarBrandName(), partView.getCarModelName());
-        Part part = new Part(
+        return new Part(
                 partView.getPartId(),
                 partView.getPartName(),
                 category.getCategoryId(),
@@ -43,11 +44,23 @@ public class PartService {
                 partView.getPartDescription(),
                 partView.getPrice()
         );
+    }
 
+    public void add(PartView partView) {
+        Part part = toPart(partView);
         add(part);
     }
 
     public void add(Part part) {
         dao.add(part);
+    }
+
+    public void update(PartView partView) {
+        Part part = toPart(partView);
+        update(part);
+    }
+
+    public void update(Part part) {
+        dao.update(part);
     }
 }

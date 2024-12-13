@@ -154,4 +154,31 @@ public class PartDAO {
             log.error("PartDAO add(): " + e.getMessage());
         }
     }
+
+    public void update(Part part) {
+        String query = """
+                UPDATE parts
+                SET part_name = ?,
+                    category_id = ?,
+                    manufacturer_id = ?,
+                    car_id = ?,
+                    part_description = ?,
+                    price = ?
+                WHERE part_id = ?;
+                """;
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, part.getPartName());
+            statement.setInt(2, part.getCategoryId());
+            statement.setInt(3, part.getManufacturerId());
+            statement.setInt(4, part.getCarId());
+            statement.setString(5, part.getPartDescription());
+            statement.setDouble(6, part.getPrice());
+            statement.setInt(7, part.getPartId());
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            log.error("PartDAO update(): " + e.getMessage());
+        }
+    }
 }
