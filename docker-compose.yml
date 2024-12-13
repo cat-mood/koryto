@@ -45,6 +45,8 @@ services:
     image: koryto_web
     ports:
       - "8080:8080"
+    volumes:
+      - ./src/main/resources:/app/resources
 
 volumes:
   pgdata:

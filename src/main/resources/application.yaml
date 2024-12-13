@@ -4,6 +4,7 @@ spring:
 
 logging:
   level:
+    cat.mood.koryto: DEBUG
     org:
       springframework:
         web: debug
@@ -16,3 +17,4 @@ cat:
       user: ${DB_USER}
       password: ${DB_PASSWORD}
       port: ${DB_PORT}
+
