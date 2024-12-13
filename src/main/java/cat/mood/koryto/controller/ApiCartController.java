@@ -23,7 +23,16 @@ public class ApiCartController {
     }
 
     @GetMapping("/get-size")
-    public int getCartSizeByUserId(@RequestParam int id) {
-        return cartService.getCartSizeByUserId(id);
+    public ResponseEntity<Integer> getCartSizeByUserId(@RequestParam int id) {
+        int count = cartService.getCartSizeByUserId(id);
+
+        return ResponseEntity.ok(count);
+    }
+
+    @PostMapping("/update-part")
+    public ResponseEntity<Void> updatePart(@RequestBody Cart cart) {
+        cartService.updateCart(cart);
+
+        return ResponseEntity.ok().build();
     }
 }

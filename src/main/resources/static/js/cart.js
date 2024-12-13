@@ -1,3 +1,47 @@
+const cartCountElement = document.querySelector(".cart-count");
+const userId = cartCountElement.getAttribute("data-user-id");
+
+async function getCartCount(user_id) {
+    return await fetch(`http://localhost:8080/api/cart/get-size?id=${user_id}`)
+        .then(async response => {
+            if (!response.ok) throw new Error("Ошибка загрузки корзины");
+            const json = await response.json();
+            console.log(json);
+            return json;
+        }).catch(error => {
+            console.error(error);
+            return 0;
+        })
+}
+
+document.addEventListener("DOMContentLoaded", async function () {
+    if (userId) {
+        cartCountElement.textContent = await getCartCount(userId);
+    }
+});
+
+async function updateAmount(userId, partId, amount) {
+    await fetch(
+        'http://localhost:8080/api/cart/update-part', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'userId': userId,
+                'partId': partId,
+                'amount': amount
+            })
+        }
+    ).then(response => {
+        if (!response.ok) throw new Error('Ошибка инкриминирования товара');
+    }).catch(error => {
+        console.error(error);
+    });
+
+    location.reload();
+}
+
 document.querySelectorAll('.quantity-btn').forEach(button => {
     button.addEventListener('click', () => {
         const quantitySpan = button.parentElement.querySelector('span');
@@ -14,7 +58,6 @@ document.querySelectorAll('.quantity-btn').forEach(button => {
             }
         }
 
-        quantitySpan.textContent = quantity;
         updateTotals();
     });
 });

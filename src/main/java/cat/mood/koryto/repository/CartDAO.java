@@ -86,4 +86,21 @@ public class CartDAO {
             log.error("CartDAO: addPartToCart(): {}", e.getMessage());
         }
     }
+
+    public void updatePart(Cart cart) {
+        String query = """
+                UPDATE cart SET amount = ? WHERE user_id = ? AND part_id = ?;
+                """;
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setShort(1, cart.getAmount());
+            statement.setInt(2, cart.getUserId());
+            statement.setInt(3, cart.getPartId());
+
+            int rows = statement.executeUpdate();
+            log.info("CartDAO: updatePart(): {} rows affected", rows);
+        } catch (SQLException e) {
+            log.error("CartDAO: updatePart(): {}", e.getMessage());
+        }
+    }
 }

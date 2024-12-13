@@ -33,4 +33,8 @@ public class CartService {
 
         return size;
     }
+
+    public void updateCart(Cart cart) {
+        cartDAO.updatePart(cart);
+    }
 }

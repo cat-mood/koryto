@@ -29,8 +29,6 @@ public class PartService {
         return dao.getById(id);
     }
 
-
-
     Part toPart(PartView partView) {
         Category category = categoryService.getByName(partView.getCategoryName());
         Manufacturer manufacturer = manufacturerService.getByName(partView.getManufacturerName());
