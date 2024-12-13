@@ -59,4 +59,12 @@ public class AdminController {
 
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/delete-user")
+    @ResponseBody
+    public ResponseEntity<Void> deleteUser(@Valid @RequestBody Map<String, Integer> id) {
+        userService.deleteUser(id.get("id"));
+
+        return ResponseEntity.ok().build();
+    }
 }

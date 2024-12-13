@@ -41,4 +41,8 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDAO.insertUser(user);
     }
+
+    public void deleteUser(int id) {
+        userDAO.deleteUser(id);
+    }
 }

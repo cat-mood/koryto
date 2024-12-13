@@ -73,7 +73,7 @@
                             <button class="btn btn-primary" th:attr="onclick=|toggleUserRole(${user.getUserId()})|" th:case="'ROLE_ADMIN'">Remove Admin</button>
                             <button class="btn btn-primary" th:attr="onclick=|toggleUserRole(${user.getUserId()})|" th:case="'ROLE_USER'">Make Admin</button>
                         </div>
-                        <button class="btn btn-danger" onclick="deleteUser(${user.id})">Delete</button>
+                        <button class="btn btn-danger" th:attr="onclick=|deleteUser(${user.getUserId()})|">Delete</button>
                     </td>
                 </tr>
             </tbody>

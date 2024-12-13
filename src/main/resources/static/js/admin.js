@@ -84,14 +84,26 @@ async function toggleUserRole(id) {
     location.reload();
 }
 
-function deleteUser(id) {
+async function deleteUser(id) {
     if (confirm('Are you sure you want to delete this user?')) {
-        const index = users.findIndex(u => u.id === id);
-        if (index > -1) {
-            users.splice(index, 1);
-        }
-        renderUsers();
+        await fetch(
+        'http://localhost:8080/admin/delete-user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({id: id})
+        }).then(response => {
+            if (!response.ok) {
+                return response.text().then(errorMessage => {
+                    alert('Add part error: ' + errorMessage);
+                    throw new Error('Add part error: ' + errorMessage);
+                });
+            }
+        })
     }
+
+    location.reload();
 }
 
 // Modal handling

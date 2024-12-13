@@ -240,4 +240,17 @@ public class UserDAO {
             log.error("UserDAO updateRoleById: " + e.getMessage());
         }
     }
+
+    public void deleteUser(int id) {
+        String query = """
+                DELETE FROM users WHERE user_id = ?;
+                """;
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            log.error("UserDAO deleteUser(): " + e.getMessage());
+        }
+    }
 }
