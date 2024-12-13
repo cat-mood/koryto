@@ -1,4 +1,4 @@
-DROP TABLE categories;
-DROP TABLE manufacturers;
-DROP TABLE parts;
-DROP TABLE cost_changes;
+DROP TABLE categories CASCADE;
+DROP TABLE manufacturers CASCADE;
+DROP TABLE parts CASCADE;
+DROP TABLE cost_changes CASCADE;

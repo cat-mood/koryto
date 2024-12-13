@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,6 +25,59 @@ public class UserDAO {
         } catch (SQLException e) {
             log.error("UserDAO constructor: {}", e.getMessage());
         }
+    }
+
+    User buildUser(ResultSet resultSet) throws SQLException {
+        return new User(
+                resultSet.getInt("user_id"),
+                resultSet.getString("username"),
+                resultSet.getString("password"),
+                resultSet.getString("first_name"),
+                resultSet.getString("middle_name"),
+                resultSet.getString("last_name"),
+                resultSet.getDate("birth_date"),
+                resultSet.getString("city"),
+                resultSet.getString("address"),
+                resultSet.getShort("post_index"),
+                resultSet.getInt("car_id"),
+                resultSet.getString("role"),
+                resultSet.getString("email")
+        );
+    }
+
+    public List<User> getAll() {
+        String query = """
+                SELECT
+                    user_id,
+                    username,
+                    password,
+                    first_name,
+                    middle_name,
+                    last_name,
+                    birth_date,
+                    city,
+                    address,
+                    post_index,
+                    car_id,
+                    role,
+                    email
+                FROM
+                    users;
+                """;
+        List<User> users = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            ResultSet resultSet = statement.executeQuery();
+
+            while(resultSet.next()) {
+                User user = buildUser(resultSet);
+
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            log.error("UserDAO getAll: " + e.getMessage());
+        }
+
+        return users;
     }
 
     public Optional<User> getUserByUsername(String username) {
@@ -50,27 +105,50 @@ public class UserDAO {
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
             rs.next();
-            user = new User(
-                    rs.getLong("user_id"),
-                    rs.getString("username"),
-                    rs.getString("password"),
-                    rs.getString("first_name"),
-                    rs.getString("middle_name"),
-                    rs.getString("last_name"),
-                    rs.getDate("birth_date"),
-                    rs.getString("city"),
-                    rs.getString("address"),
-                    rs.getShort("post_index"),
-                    rs.getLong("car_id"),
-                    rs.getString("role"),
-                    rs.getString("email")
-            );
+            user = buildUser(rs);
         } catch (SQLException e) {
             log.error("UserDAO getUserByUsername: " + e.getMessage());
             return Optional.empty();
         }
 
         return Optional.of(user);
+    }
+
+    public User getUserById(int id) {
+        String query = """
+                SELECT
+                    user_id,
+                    username,
+                    password,
+                    first_name,
+                    middle_name,
+                    last_name,
+                    birth_date,
+                    city,
+                    address,
+                    post_index,
+                    car_id,
+                    role,
+                    email
+                FROM
+                    users
+                WHERE user_id = ?;
+                """;
+        User user = null;
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, id);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                user = buildUser(resultSet);
+            }
+        } catch (SQLException e) {
+            log.error("UserDAO getUserById: " + e.getMessage());
+        }
+
+        return user;
     }
 
     public void insertUser(User user) {
@@ -130,7 +208,7 @@ public class UserDAO {
                 stmt.setNull(9, Types.SMALLINT);
             }
             if (user.getCarId() != null) {
-                stmt.setLong(10, user.getCarId());
+                stmt.setInt(10, user.getCarId());
             } else {
                 stmt.setNull(10, Types.BIGINT);
             }
@@ -144,6 +222,22 @@ public class UserDAO {
             log.info(rows + " rows inserted");
         } catch (SQLException e) {
             log.error("UserDAO insertUser: " + e.getMessage());
+        }
+    }
+
+    public void updateRoleById(int id, String role) {
+        String query = """
+                UPDATE users SET role = ?
+                WHERE user_id = ?;
+                """;
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, role);
+            statement.setInt(2, id);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            log.error("UserDAO updateRoleById: " + e.getMessage());
         }
     }
 }

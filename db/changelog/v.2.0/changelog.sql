@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS cars CASCADE;
+
 CREATE TABLE cars (
     car_id SERIAL PRIMARY KEY,
     car_brand VARCHAR(255) NOT NULL,

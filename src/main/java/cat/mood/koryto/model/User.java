@@ -31,11 +31,9 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Slf4j
-public class User implements UserDetails {
-    Long userId;
-    @NotBlank
+public class User {
+    Integer userId;
     String username;
-    @NotBlank
     String password;
     String firstName;
     String middleName;
@@ -45,13 +43,7 @@ public class User implements UserDetails {
     String city;
     String address;
     Short postIndex;
-    Long carId;
+    Integer carId;
     String role;
     String email;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role);
-        return List.of(grantedAuthority);
-    }
 }

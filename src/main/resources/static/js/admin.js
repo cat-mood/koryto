@@ -45,29 +45,43 @@ function deleteProduct(id) {
     }
 }
 
-// Users Management
-function renderUsers() {
-    const tbody = document.getElementById('usersTable');
-    tbody.innerHTML = users.map(user => `
-        <tr>
-            <td>${user.id}</td>
-            <td>${user.username}</td>
-            <td>${user.email}</td>
-            <td>${user.role}</td>
-            <td>
-                <button class="btn btn-primary" onclick="toggleUserRole(${user.id})">${user.role === 'admin' ? 'Remove Admin' : 'Make Admin'}</button>
-                <button class="btn btn-danger" onclick="deleteUser(${user.id})">Delete</button>
-            </td>
-        </tr>
-    `).join('');
+async function fetchUser(id) {
+    return await fetch(`http://localhost:8080/api/user?id=${id}`)
+        .then(response => {
+            if (!response.ok) throw new Error("Ошибка загрузки пользователя");
+            return response.json();
+        });
 }
 
-function toggleUserRole(id) {
-    const user = users.find(u => u.id === id);
+async function updateUser(user) {
+    console.log(JSON.stringify(user));
+    await fetch(
+        'http://localhost:8080/admin/update-role', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        }
+    ).then(response => {
+        if (!response.ok) {
+            return response.text().then(errorMessage => {
+                alert('Add part error: ' + errorMessage);
+                throw new Error('Add part error: ' + errorMessage);
+            });
+        }
+    });
+}
+
+async function toggleUserRole(id) {
+    const user = await fetchUser(id);
+    console.log(user);
     if (user) {
-        user.role = user.role === 'admin' ? 'user' : 'admin';
-        renderUsers();
+        user.role = user.role === 'ROLE_ADMIN' ? 'ROLE_USER' : 'ROLE_ADMIN';
+        await updateUser(user);
     }
+
+    location.reload();
 }
 
 function deleteUser(id) {

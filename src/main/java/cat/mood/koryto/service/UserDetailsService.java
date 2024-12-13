@@ -13,13 +13,13 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
-    @NonNull private UserDAO userDAO;
+    final UserDAO userDAO;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userDAO.getUserByUsername(username);
         if (user.isPresent()) {
-            return user.get();
+            return new cat.mood.koryto.model.UserDetails(user.get());
         }
         throw new UsernameNotFoundException(username);
     }

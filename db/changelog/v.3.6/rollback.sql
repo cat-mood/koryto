@@ -1,3 +1,5 @@
+DROP VIEW IF EXISTS parts_view;
+
 CREATE OR REPLACE VIEW parts_view AS
 SELECT
     part_name,

@@ -1,3 +1,3 @@
-DROP TABLE car_models;
-DROP TABLE car_brands;
-DROP TABLE cars;
+DROP TABLE car_models CASCADE;
+DROP TABLE car_brands CASCADE;
+DROP TABLE cars CASCADE;

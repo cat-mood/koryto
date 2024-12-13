@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,6 +18,18 @@ public class UserService {
 
     public Optional<User> getUserByUsername(String username) {
         return userDAO.getUserByUsername(username);
+    }
+
+    public List<User> getAll() {
+        return userDAO.getAll();
+    }
+
+    public User getUserById(int id) {
+        return userDAO.getUserById(id);
+    }
+
+    public void updateRole(int id, String role) {
+        userDAO.updateRoleById(id, role);
     }
 
     public void registerUser(User user) throws UserExist {

@@ -62,8 +62,20 @@
                 <th>Actions</th>
             </tr>
             </thead>
-            <tbody id="usersTable">
-            <!-- Users will be loaded here -->
+            <tbody id="usersTable" th:each="user:${users}">
+                <tr>
+                    <td th:text="${user.getUserId()}">User ID</td>
+                    <td th:text="${user.getUsername()}">Username</td>
+                    <td th:text="${user.getEmail()}">Email</td>
+                    <td th:text="${user.getRole()}">Role</td>
+                    <td>
+                        <div th:switch="${user.getRole()}">
+                            <button class="btn btn-primary" th:attr="onclick=|toggleUserRole(${user.getUserId()})|" th:case="'ROLE_ADMIN'">Remove Admin</button>
+                            <button class="btn btn-primary" th:attr="onclick=|toggleUserRole(${user.getUserId()})|" th:case="'ROLE_USER'">Make Admin</button>
+                        </div>
+                        <button class="btn btn-danger" onclick="deleteUser(${user.id})">Delete</button>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
