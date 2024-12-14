@@ -1,0 +1,60 @@
+<html><head><base href="." /><title>AutoParts Pro - My Orders</title>
+    <link rel="stylesheet" type="text/css" href="/css/orders.css">
+</head>
+<body>
+
+<header>
+    <div class="header-content">
+        <a href="/" class="logo">
+            <svg viewBox="0 0 200 60">
+                <text x="30" y="40" fill="#e63946" font-size="30" font-weight="bold">Корыто.ру</text>
+            </svg>
+        </a>
+
+        <div class="account-section">
+            <a class="account-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+                <span th:text="${user.getUsername()}">My account</span>
+            </a>
+            <button class="cart-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#1d3557">
+                    <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+                </svg>
+                <span class="cart-count">3</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="orders-container">
+        <div class="orders-title">
+            <h2>My Orders</h2>
+        </div>
+
+        <div class="order-card" th:each="order:${onlyOrders}" th:attr="data-items=${fullOrders}">
+            <div class="order-header">
+                <span class="order-id" th:text="'Order # ' + ${order.getOrderId()}">Order ID</span>
+                <span class="order-date" th:text="${order.getCreatedAt()}">Creation time</span>
+            </div>
+            <div class="order-details">
+                <span class="items-count">Amount</span>
+                <span class="order-total" th:text="'$' + ${order.getCost()}">Total</span>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="modal" id="orderModal">
+    <div class="modal-content">
+        <button class="close-modal">&times;</button>
+        <h3 class="modal-title"></h3>
+        <div class="order-items"></div>
+    </div>
+</div>
+
+<script src="/js/orders.js"></script>
+
+</body></html>
