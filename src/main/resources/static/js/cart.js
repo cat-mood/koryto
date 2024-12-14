@@ -49,16 +49,12 @@ document.querySelectorAll('.quantity-btn').forEach(button => {
         let quantity = parseInt(quantitySpan.textContent);
 
         if (button.textContent === '+') {
-            quantity++;
             minusButton.disabled = false;
         } else if (quantity > 1) {
-            quantity--;
             if (quantity === 1) {
                 minusButton.disabled = true;
             }
         }
-
-        updateTotals();
     });
 });
 
@@ -70,22 +66,25 @@ document.querySelectorAll('.quantity-controls').forEach(controls => {
     }
 });
 
-document.querySelectorAll('.delete-btn').forEach(button => {
-    button.addEventListener('click', () => {
-        button.closest('.cart-item').remove();
-        updateCartCount();
-        updateTotals();
-
-        if (document.querySelectorAll('.cart-item').length === 0) {
-            showEmptyCart();
+async function deletePart(userId, partId) {
+    await fetch(
+        'http://localhost:8080/api/cart/delete-part', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'userId': userId,
+                'partId': partId
+            })
         }
+    ).then(response => {
+        if (!response.ok) throw new Error('Ошибка удаления продукта');
+    }).catch(error => {
+        console.error(error);
     });
-});
 
-function updateCartCount() {
-    const itemCount = document.querySelectorAll('.cart-item').length;
-    document.querySelector('.cart-count').textContent = itemCount;
-    document.querySelector('.cart-title span').textContent = `${itemCount} items`;
+    location.reload();
 }
 
 function updateTotals() {

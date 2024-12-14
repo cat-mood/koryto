@@ -35,4 +35,11 @@ public class ApiCartController {
 
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/delete-part")
+    public ResponseEntity<Void> deletePart(@RequestBody Cart cart) {
+        cartService.deleteCart(cart);
+
+        return ResponseEntity.ok().build();
+    }
 }

@@ -103,4 +103,20 @@ public class CartDAO {
             log.error("CartDAO: updatePart(): {}", e.getMessage());
         }
     }
+
+    public void deletePart(Cart cart) {
+        String query = """
+                DELETE FROM cart WHERE user_id = ? AND part_id = ?;
+                """;
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, cart.getUserId());
+            statement.setInt(2, cart.getPartId());
+
+            int rows = statement.executeUpdate();
+            log.info("CartDAO: deletePart(): {} rows affected", rows);
+        } catch (SQLException e) {
+            log.error("CartDAO: deletePart(): {}", e.getMessage());
+        }
+    }
 }

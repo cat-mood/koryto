@@ -37,4 +37,8 @@ public class CartService {
     public void updateCart(Cart cart) {
         cartDAO.updatePart(cart);
     }
+
+    public void deleteCart(Cart cart) {
+        cartDAO.deletePart(cart);
+    }
 }

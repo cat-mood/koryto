@@ -51,7 +51,7 @@
                 <button class="quantity-btn" th:attr="onclick=|updateAmount(${user.getId()}, ${part.getPartId()}, ${part.getAmount()} + 1)|">+</button>
             </div>
             <div class="item-price" th:text="'$' + ${part.getPrice()}">Price</div>
-            <button class="delete-btn">×</button>
+            <button class="delete-btn" th:attr="onclick=|deletePart(${user.getId()}, ${part.getPartId()})|">×</button>
         </div>
 
         <div class="cart-summary">
