@@ -23,6 +23,8 @@ public class CartController {
     public String cart(Model model, @AuthenticationPrincipal UserDetails user) {
         model.addAttribute("parts", cartService.getCartByUserId(user.getId()));
         model.addAttribute("user", user);
+        model.addAttribute("total", cartService.getTotal(user.getId()));
+
         return "cart";
     }
 }

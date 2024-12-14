@@ -41,4 +41,14 @@ public class CartService {
     public void deleteCart(Cart cart) {
         cartDAO.deletePart(cart);
     }
+
+    public double getTotal(int userId) {
+        List<CartView> cart = cartDAO.getCartByUserId(userId);
+        double total = 0;
+        for (CartView cartView : cart) {
+            total += cartView.getPrice() * cartView.getAmount();
+        }
+
+        return total;
+    }
 }

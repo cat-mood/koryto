@@ -42,4 +42,11 @@ public class ApiCartController {
 
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/get-total")
+    public ResponseEntity<Double> getCartTotalByUserId(@RequestParam int id) {
+        double total = cartService.getTotal(id);
+
+        return ResponseEntity.ok(total);
+    }
 }

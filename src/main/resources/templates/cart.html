@@ -56,20 +56,8 @@
 
         <div class="cart-summary">
             <div class="summary-row">
-                <span>Subtotal:</span>
-                <strong>$87.97</strong>
-            </div>
-            <div class="summary-row">
-                <span>Shipping:</span>
-                <strong>$5.99</strong>
-            </div>
-            <div class="summary-row">
-                <span>Tax:</span>
-                <strong>$7.04</strong>
-            </div>
-            <div class="summary-row">
                 <h3>Total:</h3>
-                <h3>$101.00</h3>
+                <h3 th:text="'$' + ${total}">Total</h3>
             </div>
             <button class="checkout-btn">Proceed to Checkout</button>
         </div>
