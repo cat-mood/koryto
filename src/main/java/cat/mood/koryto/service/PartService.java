@@ -1,10 +1,6 @@
 package cat.mood.koryto.service;
 
-import cat.mood.koryto.model.Car;
-import cat.mood.koryto.model.Category;
-import cat.mood.koryto.model.Manufacturer;
-import cat.mood.koryto.model.Part;
-import cat.mood.koryto.model.PartView;
+import cat.mood.koryto.model.*;
 import cat.mood.koryto.repository.PartDAO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +28,7 @@ public class PartService {
     Part toPart(PartView partView) {
         Category category = categoryService.getByName(partView.getCategoryName());
         Manufacturer manufacturer = manufacturerService.getByName(partView.getManufacturerName());
-        Car car = carService.getCarByBrandAndModel(partView.getCarBrandName(), partView.getCarModelName());
+        CarView car = carService.getCarByBrandAndModel(partView.getCarBrandId(), partView.getCarModelId());
         return new Part(
                 partView.getPartId(),
                 partView.getPartName(),
@@ -60,5 +56,13 @@ public class PartService {
 
     public void update(Part part) {
         dao.update(part);
+    }
+
+    public List<PartView> getRecommended(User user) {
+        log.debug("PartService.getRecommended(): {}", user.toString());
+        Car car = carService.getByUser(user);
+        if (car == null) return List.of();
+        log.debug("PartService.getRecommended(): car = {}", car.getCarId());
+        return dao.getByBrandAndModel(car.getCarBrandId(), car.getCarModelId());
     }
 }

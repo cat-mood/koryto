@@ -1,12 +1,14 @@
 package cat.mood.koryto.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collection;
 import java.util.List;
 
+@Data
 @AllArgsConstructor
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
     User user;

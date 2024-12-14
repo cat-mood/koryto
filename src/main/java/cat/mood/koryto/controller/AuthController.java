@@ -2,6 +2,7 @@ package cat.mood.koryto.controller;
 
 import cat.mood.koryto.exception.UserExist;
 import cat.mood.koryto.model.User;
+import cat.mood.koryto.model.UserRegister;
 import cat.mood.koryto.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String postRegister(@Valid @ModelAttribute User user, BindingResult bindingResult, Model model) {
+    public String postRegister(@Valid @ModelAttribute UserRegister user, BindingResult bindingResult, Model model) {
+        log.debug("AuthController.postRegister(): {}", user.toString());
         try {
             userService.registerUser(user);
         } catch (UserExist e) {

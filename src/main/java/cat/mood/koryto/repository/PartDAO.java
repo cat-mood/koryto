@@ -33,6 +33,25 @@ public class PartDAO {
         }
     }
 
+    PartView buildPartView(ResultSet resultSet) throws SQLException {
+        return new PartView(
+                resultSet.getString("part_name"),
+                resultSet.getString("category_name"),
+                resultSet.getString("manufacturer_name"),
+                resultSet.getString("manufacturer_address"),
+                resultSet.getString("manufacturer_phone_number"),
+                resultSet.getString("car_brand_name"),
+                resultSet.getString("car_model_name"),
+                resultSet.getString("part_description"),
+                resultSet.getInt("part_id"),
+                resultSet.getInt("category_id"),
+                resultSet.getInt("manufacturer_id"),
+                resultSet.getInt("car_brand_id"),
+                resultSet.getInt("car_model_id"),
+                resultSet.getDouble("price")
+        );
+    }
+
     public List<PartView> getAll() {
         List<PartView> parts = new ArrayList<>();
         String query = """
@@ -57,22 +76,7 @@ public class PartDAO {
         try (Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
-                PartView part = new PartView(
-                        resultSet.getString("part_name"),
-                        resultSet.getString("category_name"),
-                        resultSet.getString("manufacturer_name"),
-                        resultSet.getString("manufacturer_address"),
-                        resultSet.getString("manufacturer_phone_number"),
-                        resultSet.getString("car_brand_name"),
-                        resultSet.getString("car_model_name"),
-                        resultSet.getString("part_description"),
-                        resultSet.getInt("part_id"),
-                        resultSet.getInt("category_id"),
-                        resultSet.getInt("manufacturer_id"),
-                        resultSet.getInt("car_brand_id"),
-                        resultSet.getInt("car_model_id"),
-                        resultSet.getDouble("price")
-                );
+                PartView part = buildPartView(resultSet);
                 parts.add(part);
             }
         } catch (SQLException e) {
@@ -110,22 +114,7 @@ public class PartDAO {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                part = new PartView(
-                        resultSet.getString("part_name"),
-                        resultSet.getString("category_name"),
-                        resultSet.getString("manufacturer_name"),
-                        resultSet.getString("manufacturer_address"),
-                        resultSet.getString("manufacturer_phone_number"),
-                        resultSet.getString("car_brand_name"),
-                        resultSet.getString("car_model_name"),
-                        resultSet.getString("part_description"),
-                        resultSet.getInt("part_id"),
-                        resultSet.getInt("category_id"),
-                        resultSet.getInt("manufacturer_id"),
-                        resultSet.getInt("car_brand_id"),
-                        resultSet.getInt("car_model_id"),
-                        resultSet.getDouble("price")
-                );
+                part = buildPartView(resultSet);
             }
         } catch (SQLException e) {
             log.error("PartDAO getById(): " + e.getMessage());
@@ -180,5 +169,44 @@ public class PartDAO {
         } catch (SQLException e) {
             log.error("PartDAO update(): " + e.getMessage());
         }
+    }
+
+    public List<PartView> getByBrandAndModel(int brandId, int modelId) {
+        List<PartView> parts = new ArrayList<>();
+        String query = """
+                SELECT
+                    part_name,
+                    category_name,
+                    manufacturer_name,
+                    manufacturer_address,
+                    manufacturer_phone_number,
+                    car_brand_name,
+                    car_model_name,
+                    part_description,
+                    part_id,
+                    category_id,
+                    manufacturer_id,
+                    car_brand_id,
+                    car_model_id,
+                    price
+                FROM
+                    parts_view
+                WHERE car_brand_id = ? AND car_model_id = ?;
+                """;
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, brandId);
+            statement.setInt(2, modelId);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                PartView part = buildPartView(resultSet);
+                parts.add(part);
+            }
+        } catch (SQLException e) {
+            log.error("PartDAO : getByBrandAndModel(): {}" , e.getMessage());
+        }
+
+        return parts;
     }
 }

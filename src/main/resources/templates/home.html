@@ -27,19 +27,19 @@
 </header>
 
 <main>
-    <section>
+    <section th:if="${!recommended.isEmpty()}">
         <h2 class="section-title">Recommended for You</h2>
         <div class="products-grid">
-            <div class="product-card">
+            <div class="product-card" th:each="part:${recommended}">
                 <div class="product-image">
                     <svg width="100" height="100" viewBox="0 0 24 24" fill="#1d3557">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
                     </svg>
                 </div>
                 <div class="product-details">
-                    <h3>Brake Pads - Toyota Camry</h3>
-                    <p class="product-price">$49.99</p>
-                    <button class="add-to-cart">Add to Cart</button>
+                    <h3 th:text="${part.getPartName()}">Part Name</h3>
+                    <p class="product-price" th:text="'$' + ${part.getPrice()}">Price</p>
+                    <button class="add-to-cart" th:attr="onclick=|addToCart(${user.getId()}, ${part.getPartId()})|">Add to Cart</button>
                 </div>
             </div>
         </div>

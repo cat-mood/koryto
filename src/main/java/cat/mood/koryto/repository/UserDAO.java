@@ -2,6 +2,7 @@ package cat.mood.koryto.repository;
 
 import cat.mood.koryto.config.DatabaseConfig;
 import cat.mood.koryto.model.User;
+import cat.mood.koryto.model.UserRegister;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -74,7 +75,7 @@ public class UserDAO {
                 users.add(user);
             }
         } catch (SQLException e) {
-            log.error("UserDAO getAll: " + e.getMessage());
+            log.error("UserDAO getAll: {}", e.getMessage());
         }
 
         return users;
@@ -100,14 +101,20 @@ public class UserDAO {
                     users
                 WHERE username=?;
                 """;
-        User user;
+        User user = null;
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, username);
             ResultSet rs = stmt.executeQuery();
-            rs.next();
-            user = buildUser(rs);
+
+            if (rs.next()) {
+                user = buildUser(rs);
+            }
         } catch (SQLException e) {
-            log.error("UserDAO getUserByUsername: " + e.getMessage());
+            log.error("UserDAO getUserByUsername: {}", e.getMessage());
+            return Optional.empty();
+        }
+
+        if (user == null) {
             return Optional.empty();
         }
 
@@ -250,7 +257,7 @@ public class UserDAO {
             statement.setInt(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
-            log.error("UserDAO deleteUser(): " + e.getMessage());
+            log.error("UserDAO deleteUser(): {}", e.getMessage());
         }
     }
 }

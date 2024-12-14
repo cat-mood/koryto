@@ -1,7 +1,9 @@
 package cat.mood.koryto.service;
 
 import cat.mood.koryto.exception.UserExist;
+import cat.mood.koryto.model.Car;
 import cat.mood.koryto.model.User;
+import cat.mood.koryto.model.UserRegister;
 import cat.mood.koryto.repository.UserDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +17,27 @@ import java.util.Optional;
 public class UserService {
     final UserDAO userDAO;
     final PasswordEncoder passwordEncoder;
+    final CarService carService;
+
+    User toUser(UserRegister user) {
+        Car car = carService.getCarByBrandNameAndModelName(user.getCarBrandName(), user.getCarModelName());
+
+        return new User(
+                0,
+                user.getUsername(),
+                user.getPassword(),
+                user.getFirstName(),
+                user.getMiddleName(),
+                user.getLastName(),
+                user.getBirthDate(),
+                user.getCity(),
+                user.getAddress(),
+                user.getPostIndex(),
+                car.getCarId(),
+                null,
+                user.getEmail()
+        );
+    }
 
     public Optional<User> getUserByUsername(String username) {
         return userDAO.getUserByUsername(username);
@@ -32,11 +55,12 @@ public class UserService {
         userDAO.updateRoleById(id, role);
     }
 
-    public void registerUser(User user) throws UserExist {
-        Optional<User> foundUser = userDAO.getUserByUsername(user.getUsername());
+    public void registerUser(UserRegister userRegister) throws UserExist {
+        Optional<User> foundUser = userDAO.getUserByUsername(userRegister.getUsername());
         if (foundUser.isPresent()) {
             throw new UserExist();
         }
+        User user = toUser(userRegister);
         user.setRole("ROLE_USER");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDAO.insertUser(user);
