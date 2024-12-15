@@ -39,7 +39,7 @@
                 <div class="product-details">
                     <h3 th:text="${part.getPartName()}">Part Name</h3>
                     <p class="product-price" th:text="'$' + ${part.getPrice()}">Price</p>
-                    <button class="add-to-cart" th:attr="onclick=|addToCart(${user.getUserId()}, ${part.getPartId()})|">Add to Cart</button>
+                    <button class="add-to-cart" th:attr="onclick=|addToCart(${part.getPartId()})|">Add to Cart</button>
                 </div>
             </div>
         </div>
@@ -58,7 +58,7 @@
 
                     <h3 th:text="${part.getPartName()}">Product Name</h3>
                     <p th:text="'$' + ${part.getPrice()}" class="product-price">Price</p>
-                    <button class="add-to-cart" th:attr="onclick=|addToCart(${user.getUserId()}, ${part.getPartId()})|">Add to Cart</button>
+                    <button class="add-to-cart" th:attr="onclick=|addToCart(${part.getPartId()})|">Add to Cart</button>
                 </div>
             </div>
         </div>

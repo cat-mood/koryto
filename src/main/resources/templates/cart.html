@@ -55,12 +55,12 @@
                 <p th:text="'Part #: ' + ${part.getPartId()}">Part id</p>
             </div>
             <div class="quantity-controls">
-                <button class="quantity-btn" th:attr="onclick=|updateAmount(${user.getUserId()}, ${part.getPartId()}, ${part.getAmount()} - 1)|">-</button>
+                <button class="quantity-btn" th:attr="onclick=|updateAmount(${part.getPartId()}, ${part.getAmount()} - 1)|">-</button>
                 <span th:text="${part.getAmount()}">0</span>
-                <button class="quantity-btn" th:attr="onclick=|updateAmount(${user.getUserId()}, ${part.getPartId()}, ${part.getAmount()} + 1)|">+</button>
+                <button class="quantity-btn" th:attr="onclick=|updateAmount(${part.getPartId()}, ${part.getAmount()} + 1)|">+</button>
             </div>
             <div class="item-price" th:text="'$' + ${part.getPrice()}">Price</div>
-            <button class="delete-btn" th:attr="onclick=|deletePart(${user.getUserId()}, ${part.getPartId()})|">×</button>
+            <button class="delete-btn" th:attr="onclick=|deletePart(${part.getPartId()})|">×</button>
         </div>
 
         <div class="cart-summary">
