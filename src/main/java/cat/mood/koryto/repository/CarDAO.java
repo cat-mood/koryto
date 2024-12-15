@@ -92,17 +92,15 @@ public class CarDAO {
         return models;
     }
 
-    public CarView getCarByBrandAndModel(int brandId, int modelId) {
-        CarView car = null;
+    public Car getCarByBrandAndModel(int brandId, int modelId) {
+        Car car = null;
         String query = """
                 SELECT
-                    car_brand_name,
-                    car_model_name,
                     car_brand_id,
                     car_model_id,
                     car_id
                 FROM
-                    cars_view
+                    cars
                 WHERE car_brand_id = ? AND car_model_id = ?;
                 """;
 
@@ -113,7 +111,7 @@ public class CarDAO {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                car = buildCarView(resultSet);
+                car = buildCar(resultSet);
             } else {
                 log.info("Car getCarByBrandAndModel: doesn't exist");
             }

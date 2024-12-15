@@ -26,7 +26,7 @@ public class CarService {
         return carDAO.getCarByBrandNameAndModelName(brand, modelName);
     }
 
-    public CarView getCarByBrandAndModel(int brandId, int modelId) {
+    public Car getCarByBrandAndModel(int brandId, int modelId) {
         return carDAO.getCarByBrandAndModel(brandId, modelId);
     }
 

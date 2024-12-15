@@ -1,10 +1,7 @@
 package cat.mood.koryto.repository;
 
 import cat.mood.koryto.config.DatabaseConfig;
-import cat.mood.koryto.model.Cart;
-import cat.mood.koryto.model.Order;
-import cat.mood.koryto.model.OrdersView;
-import cat.mood.koryto.model.Part;
+import cat.mood.koryto.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,52 +81,73 @@ public class OrderDAO {
         return orders;
     }
 
-    public void deleteOrder(OrdersView ordersView) {
-        // TODO
-    }
-
-    public void createOrder(Order order) {
-        String insertOrder = """
-                INSERT INTO orders (user_id, cost, created_at) VALUES
-                (?, ?, ?);
+    public void deleteOrder(int orderId) {
+        //language=PostgreSQL
+        String query = """
+                DELETE FROM orders WHERE order_id = ?;
+                DELETE FROM orders_body WHERE order_id = ?;
                 """;
 
+        int rows = 0;
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, orderId);
+            statement.setInt(2, orderId);
+
+            rows = statement.executeUpdate();
+        } catch (SQLException e) {
+            log.error("OrderDAO.deleteOrder: {}", e.getMessage());
+        }
+
+        log.info("OrderDAO.deleteOrder: {} rows affected", rows);
+    }
+
+    public void createOrderBody(List<OrderBody> orderBodyList) throws SQLException {
+        //language=PostgreSQL
         String insertParts = """
                 INSERT INTO orders_body (order_id, part_id, amount) VALUES
                 (?, ?, ?);
                 """;
 
-        int rows = 0;
+        int[] result = null;
+
+        try (PreparedStatement statement = connection.prepareStatement(insertParts)) {
+            for (OrderBody orderBody : orderBodyList) {
+                statement.setInt(1, orderBody.getOrderId());
+                statement.setInt(2, orderBody.getPartId());
+                statement.setDouble(3, orderBody.getAmount());
+
+                statement.addBatch();
+            }
+
+            result = statement.executeBatch();
+        }
+
+        log.info("OrderDAO.createOrderBody: {} rows affected", result.length);
+    }
+
+    // Return id
+    public int createOrder(Order order) throws SQLException {
+        //language=PostgreSQL
+        String insertOrder = """
+                INSERT INTO orders (user_id, cost, created_at) VALUES
+                (?, ?, ?)
+                RETURNING order_id;
+                """;
+
+        int id = 0;
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(insertOrder)) {
             preparedStatement.setInt(1, order.getUserId());
             preparedStatement.setDouble(2, order.getCost());
             preparedStatement.setTimestamp(3, order.getCreatedAt());
 
-            rows = preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            log.error("OrderDAO.createOrder: {}", e.getMessage());
-            return;
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                id = resultSet.getInt("order_id");
+            }
         }
 
-        log.info("OrderDAO.createOrder: {} rows affected", rows);
-
-//        try (PreparedStatement preparedStatement = connection.prepareStatement(insertParts)) {
-//            for (Cart part : parts) {
-//                preparedStatement.setInt(1, order.getOrderId());
-//                preparedStatement.setInt(2, part.getPartId());
-//                preparedStatement.setShort(3, part.getAmount());
-//            }
-//
-//            rows = preparedStatement.executeUpdate();
-//        } catch (SQLException e) {
-//            log.error("OrderDAO.createOrder: {}", e.getMessage());
-//        }
-//
-//        log.info("OrderDAO.createOrder: {} rows affected", rows);
-
-//        if (rows == 0) {
-//            deleteOrder(ordersViews.get(0));
-//        }
+        return id;
     }
 }

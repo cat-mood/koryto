@@ -5,6 +5,7 @@ import cat.mood.koryto.repository.OrderDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class OrderService {
     final OrderDAO orderDao;
+    private final OrderDAO orderDAO;
 
     Order toOrder(OrdersView ordersView) {
         return new Order(
@@ -38,7 +40,11 @@ public class OrderService {
         return orderDao.getOrdersByUserId(userId);
     }
 
-    public void createOrder(Order order) {
-        orderDao.createOrder(order);
+    public int createOrder(Order order) throws SQLException {
+        return orderDao.createOrder(order);
+    }
+
+    public void createOrderBody(List<OrderBody> orderBodies) throws SQLException {
+        orderDAO.createOrderBody(orderBodies);
     }
 }

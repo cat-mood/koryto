@@ -138,8 +138,9 @@ function calculateSubtotal() {
 }
 
 async function createOrder(cost) {
+    console.log(parts);
     await fetch(
-        "http://localhost:8080/api/orders/create-order", {
+        'http://localhost:8080/api/orders/create-order', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -148,8 +149,33 @@ async function createOrder(cost) {
                 "cost": cost
             })
         }
-    ).then(response => {
+    ).then(async response => {
         if (!response.ok) throw new Error("Ошибка создания заказа");
-        console.log(response);
+        const orderId = await response.json();
+        console.log(`orderId: ${orderId}`);
+        await createOrderBody(orderId, parts);
+    }).catch(error => console.error(error));
+}
+
+async function createOrderBody(orderId, parts) {
+    const orderBody = [];
+    parts.forEach(part => {
+        orderBody.push({
+            'orderId': orderId,
+            'partId': part.partId,
+            'amount': part.amount
+        })
+    });
+
+    await fetch(
+        'http://localhost:8080/api/orders/create-order-body', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(orderBody)
+        }
+    ).then(response => {
+        if (!response.ok) return new Error('Ошибка создания тела заказа');
     }).catch(error => console.error(error));
 }

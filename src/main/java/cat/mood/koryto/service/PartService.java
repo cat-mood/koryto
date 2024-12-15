@@ -28,7 +28,13 @@ public class PartService {
     Part toPart(PartView partView) {
         Category category = categoryService.getByName(partView.getCategoryName());
         Manufacturer manufacturer = manufacturerService.getByName(partView.getManufacturerName());
-        CarView car = carService.getCarByBrandAndModel(partView.getCarBrandId(), partView.getCarModelId());
+        Car car;
+        if (partView.getCarBrandId() == null || partView.getCarModelId() == null) {
+            car = carService.getCarByBrandNameAndModelName(partView.getCarBrandName(), partView.getCarModelName());
+        } else {
+            car = carService.getCarByBrandAndModel(partView.getCarBrandId(), partView.getCarModelId());
+        }
+
         return new Part(
                 partView.getPartId(),
                 partView.getPartName(),

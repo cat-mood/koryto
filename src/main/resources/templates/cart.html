@@ -68,6 +68,9 @@
                 <h3>Total:</h3>
                 <h3 th:text="'$' + ${total}">Total</h3>
             </div>
+            <script th:inline="javascript">
+                const parts = /*[[${parts}]]*/ [];
+            </script>
             <button class="checkout-btn" th:attr="onclick=|createOrder(${total})|">Proceed to Checkout</button>
         </div>
     </div>
