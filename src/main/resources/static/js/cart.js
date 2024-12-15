@@ -14,11 +14,11 @@ async function getCartCount(user_id) {
         })
 }
 
-document.addEventListener("DOMContentLoaded", async function () {
-    if (userId) {
-        cartCountElement.textContent = await getCartCount(userId);
-    }
-});
+// document.addEventListener("DOMContentLoaded", async function () {
+//     if (userId) {
+//         cartCountElement.textContent = await getCartCount(userId);
+//     }
+// });
 
 async function updateAmount(userId, partId, amount) {
     await fetch(

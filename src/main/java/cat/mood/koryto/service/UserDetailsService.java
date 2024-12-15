@@ -19,7 +19,7 @@ public class UserDetailsService implements org.springframework.security.core.use
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userDAO.getUserByUsername(username);
         if (user.isPresent()) {
-            return new cat.mood.koryto.model.UserDetails(user.get());
+            return user.get();
         }
         throw new UsernameNotFoundException(username);
     }

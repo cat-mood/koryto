@@ -31,7 +31,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Slf4j
-public class User {
+public class User implements UserDetails {
     Integer userId;
     String username;
     String password;
@@ -46,4 +46,20 @@ public class User {
     Integer carId;
     String role;
     String email;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(getRole());
+        return List.of(grantedAuthority);
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
 }

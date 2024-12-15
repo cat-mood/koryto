@@ -23,8 +23,8 @@ public class ApiOrdersController {
     final OrderService orderService;
 
     @PostMapping("/create-order")
-    public ResponseEntity<String> createOrder(@RequestBody Order order, @AuthenticationPrincipal UserDetails user) {
-        order.setUserId(user.getId());
+    public ResponseEntity<String> createOrder(@RequestBody Order order, @AuthenticationPrincipal User user) {
+        order.setUserId(user.getUserId());
         order.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         int orderId = 0;
         try {
@@ -40,7 +40,7 @@ public class ApiOrdersController {
     }
 
     @PostMapping("/create-order-body")
-    public ResponseEntity<String> createOrderBody(@RequestBody List<OrderBody> orderBodies, @AuthenticationPrincipal UserDetails user) {
+    public ResponseEntity<String> createOrderBody(@RequestBody List<OrderBody> orderBodies, @AuthenticationPrincipal User user) {
         try {
             orderService.createOrderBody(orderBodies);
         } catch (Exception e) {
