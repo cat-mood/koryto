@@ -11,6 +11,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
+    // TODO: refactor to user
     User user;
 
     @Override

@@ -3,6 +3,8 @@ spring:
     name: koryto
 
 logging:
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss} %highlight(%-5level) [%thread] %logger{36} - %msg%n'
   level:
     cat.mood.koryto: DEBUG
     org:

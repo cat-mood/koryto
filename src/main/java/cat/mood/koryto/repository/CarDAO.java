@@ -14,6 +14,7 @@ import java.util.List;
 @Repository
 @Slf4j
 public class CarDAO {
+    // TODO: make connection pool
     Connection connection;
 
     @Autowired

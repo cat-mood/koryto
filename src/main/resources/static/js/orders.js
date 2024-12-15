@@ -1,27 +1,34 @@
 document.querySelectorAll('.order-card').forEach(card => {
     card.addEventListener('click', () => {
-        const orderId = card.querySelector('.order-id').textContent;
-        const items = JSON.parse(card.dataset.items);
+        // const items = JSON.parse(card.dataset);
         const modal = document.getElementById('orderModal');
         const modalTitle = modal.querySelector('.modal-title');
         const orderItems = modal.querySelector('.order-items');
+        const orderId = card.dataset.orderid;
+        console.log(orderId);
 
-        modalTitle.textContent = orderId;
-        orderItems.innerHTML = items.map(item => `
-            <div class="order-item">
-                <div class="item-image">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="#1d3557">
-                        <path d="M20 3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H4V5h16v14z"/>
-                        <path d="M12 6c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/>
-                    </svg>
-                </div>
-                <div class="item-details">
-                    <h4>${item.name}</h4>
-                    <p>Quantity: ${item.quantity}</p>
-                </div>
-                <div class="item-price">$${item.price}</div>
-            </div>
-        `).join('');
+        modalTitle.textContent = 'Order #' + orderId;
+        orderItems.innerHTML = fullOrders.map(item => {
+            if (item.orderId != orderId) {
+                return "";
+            } else {
+                return `
+                    <div class="order-item">
+                        <div class="item-image">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="#1d3557">
+                                <path d="M20 3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H4V5h16v14z"/>
+                                <path d="M12 6c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/>
+                            </svg>
+                        </div>
+                        <div class="item-details">
+                            <h4>${item.partName}</h4>
+                            <p>Amount: ${item.amount}</p>
+                        </div>
+                        <div class="item-price">$${item.price}</div>
+                    </div>
+                `;
+            }
+        }).join('');
 
         modal.style.display = 'block';
     });
@@ -46,7 +53,7 @@ function showEmptyOrders() {
             </svg>
             <h2>No Orders Yet</h2>
             <p>You haven't placed any orders yet.</p>
-            <a href="https://autopartspro.com" class="shop-now-btn">Start Shopping</a>
+            <a href="/" class="shop-now-btn">Start Shopping</a>
         </div>
     `;
 }

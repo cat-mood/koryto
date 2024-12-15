@@ -61,7 +61,8 @@ public class OrderDAO {
                     manufacturer_id,
                     car_id,
                     part_description,
-                    price
+                    price,
+                    amount
                 FROM
                     orders_view
                 WHERE user_id = ?;
