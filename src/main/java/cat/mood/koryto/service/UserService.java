@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +21,12 @@ public class UserService {
     final CarService carService;
 
     User toUser(UserRegister user) throws Exception {
-        Car car = carService.getCarByBrandAndModel(user.getCarBrandId(), user.getCarModelId());
+        Car car;
+        try {
+            car = carService.getCarByBrandAndModel(user.getCarBrandId(), user.getCarModelId());
+        } catch (Exception e) {
+            car = new Car(0, 0, 0);
+        }
 
         return new User(
                 0,

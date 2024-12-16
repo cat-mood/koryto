@@ -32,8 +32,10 @@ public class AuthController {
         try {
             userService.registerUser(user);
         } catch (UserExist e) {
+            log.error("AuthController.postRegister(): {}", e.toString());
             return "redirect:/register?error=1";
         } catch (Exception e) {
+            log.error("AuthController.postRegister(): {}", e.toString());
             return "redirect:/error";
         }
 
