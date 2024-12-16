@@ -5,9 +5,11 @@
 
 <header>
     <div class="header-content">
-        <svg class="logo" viewBox="0 0 200 60">
-            <text x="30" y="40" fill="#e63946" font-size="30" font-weight="bold">Корыто.ру</text>
-        </svg>
+        <a href="/">
+            <svg class="logo" viewBox="0 0 200 60">
+                <text x="30" y="40" fill="#e63946" font-size="30" font-weight="bold">Корыто.ру</text>
+            </svg>
+        </a>
 
         <div class="account-section">
             <a href="/orders" class="account-btn">
@@ -61,7 +63,7 @@
                 <label>Car Brand</label>
                 <select class="filter-select" id="carBrand">
                     <option value="">All Brands</option>
-                    <option th:each="brand:${brands}" th:value="${brand}" th:text="${brand}">Brand</option>
+                    <option th:each="brand:${brands}" th:value="${brand.getCarBrandId()}" th:text="${brand.getCarBrandName()}">Brand</option>
                 </select>
             </div>
             <div class="filter-group">

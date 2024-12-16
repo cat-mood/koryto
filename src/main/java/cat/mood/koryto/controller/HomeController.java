@@ -1,5 +1,6 @@
 package cat.mood.koryto.controller;
 
+import cat.mood.koryto.model.SearchParameters;
 import cat.mood.koryto.model.User;
 import cat.mood.koryto.service.*;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Optional;
 
 @Controller
 @Slf4j
@@ -20,9 +25,14 @@ public class HomeController {
     final ManufacturerService manufacturerService;
 
     @GetMapping("/")
-    public String home(Model model, @AuthenticationPrincipal User user) {
+    public String home(
+            Model model,
+            @AuthenticationPrincipal User user,
+            @ModelAttribute SearchParameters params
+    ) {
+        log.debug("HomeController.home(): {}", params.toString());
         try {
-            model.addAttribute("parts", partService.getAll());
+            model.addAttribute("parts", partService.search(params));
             model.addAttribute("user", user);
             model.addAttribute("recommended", partService.getRecommended(user));
             model.addAttribute("cartSize", cartService.getCartSizeByUserId(user.getUserId()));

@@ -3,6 +3,7 @@ package cat.mood.koryto.repository;
 import cat.mood.koryto.config.DatabaseConfig;
 import cat.mood.koryto.model.Part;
 import cat.mood.koryto.model.PartView;
+import cat.mood.koryto.model.SearchParameters;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -243,6 +244,91 @@ public class PartDAO {
                 ResultSet resultSet = statement.executeQuery();
                 while (resultSet.next()) {
                     PartView part = buildPartView(resultSet);
+                }
+            }
+        }
+
+        return parts;
+    }
+
+    public List<PartView> search(SearchParameters params) throws SQLException {
+        List<PartView> parts = new ArrayList<>();
+        // language=PostgreSQL
+        StringBuilder query = new StringBuilder("""
+                SELECT
+                    part_name,
+                    category_name,
+                    manufacturer_name,
+                    manufacturer_address,
+                    manufacturer_phone_number,
+                    car_brand_name,
+                    car_model_name,
+                    part_description,
+                    part_id,
+                    category_id,
+                    manufacturer_id,
+                    car_brand_id,
+                    car_model_id,
+                    price,
+                    car_id
+                FROM
+                    parts_view
+                WHERE 1 = 1 
+                """);
+
+        if (params.getSearch() != null && !params.getSearch().isEmpty()) {
+            query.append(" AND part_name % ?");
+        }
+        if (params.getCategoryId() != null) {
+            query.append(" AND category_id = ?");
+        }
+        if (params.getCarModelId() != null) {
+            query.append(" AND car_model_id = ?");
+        }
+        if (params.getManufacturerId() != null) {
+            query.append(" AND manufacturer_id = ?");
+        }
+        if (params.getMinPrice() != null) {
+            query.append(" AND price >= ?");
+        }
+        if (params.getMaxPrice() != null && !params.getMaxPrice().isInfinite()) {
+            query.append(" AND price <= ?");
+        }
+        query.append(";");
+
+        try (Connection connection = userSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(query.toString())) {
+                int i = 1;
+                if (params.getSearch() != null && !params.getSearch().isEmpty()) {
+                    statement.setString(i, params.getSearch());
+                    ++i;
+                }
+                if (params.getCategoryId() != null) {
+                    statement.setInt(i, params.getCategoryId());
+                    ++i;
+                }
+                if (params.getCarModelId() != null) {
+                    statement.setInt(i, params.getCarModelId());
+                    ++i;
+                }
+                if (params.getManufacturerId() != null) {
+                    statement.setInt(4, params.getManufacturerId());
+                    ++i;
+                }
+                if (params.getMinPrice() != null) {
+                    statement.setDouble(i, params.getMinPrice());
+                    ++i;
+                }
+                if (params.getMaxPrice() != null && !params.getMaxPrice().isInfinite()) {
+                    statement.setDouble(i, params.getMaxPrice());
+                    ++i;
+                }
+
+                ResultSet resultSet = statement.executeQuery();
+
+                while (resultSet.next()) {
+                    PartView part = buildPartView(resultSet);
+                    parts.add(part);
                 }
             }
         }

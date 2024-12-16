@@ -18,6 +18,13 @@ async function addToCart(partId) {
     location.reload();
 }
 
+function normalize(value, defaultValue = '') {
+    // Проверяем на null, undefined, пустую строку, NaN
+    return (value === null || value === undefined || value === '' || isNaN(value))
+        ? defaultValue
+        : value;
+}
+
 // Search and Filter Functionality
 const searchInput = document.querySelector('.search-input');
 const searchButton = document.querySelector('.search-button');
@@ -25,54 +32,18 @@ const filters = document.querySelectorAll('.filter-select');
 const priceInputs = document.querySelectorAll('.price-input');
 
 function performSearch() {
-    const searchTerm = searchInput.value.toLowerCase();
-    const category = document.getElementById('category').value.toLowerCase();
-    const carModel = document.getElementById('carModel').value.toLowerCase();
-    const manufacturer = document.getElementById('manufacturer').value.toLowerCase();
-    const minPrice = parseFloat(document.getElementById('minPrice').value) || 0;
-    const maxPrice = parseFloat(document.getElementById('maxPrice').value) || Infinity;
+    const searchTerm = searchInput.value;
+    const categoryId = normalize(document.getElementById('category')?.value);
+    const carModelId = normalize(document.getElementById('carModel')?.value);
+    const manufacturerId = normalize(document.getElementById('manufacturer')?.value);
+    const minPrice = normalize(parseFloat(document.getElementById('minPrice')?.value));
+    const maxPrice = normalize(parseFloat(document.getElementById('maxPrice')?.value), 'Infinity');
 
-    const products = document.querySelectorAll('.product-card');
+    console.log(searchTerm, categoryId, carModelId, manufacturerId, minPrice, maxPrice);
 
-    products.forEach(product => {
-        const productName = product.querySelector('h3').textContent.toLowerCase();
-        const productPrice = parseFloat(product.querySelector('.product-price').textContent.replace('$', ''));
-
-        // Check if product matches all selected filters
-        let matchesSearch = !searchTerm || productName.includes(searchTerm);
-        let matchesCategory = !category || productName.includes(category);
-        let matchesCarModel = !carModel || productName.includes(carModel);
-        let matchesManufacturer = !manufacturer || productName.includes(manufacturer);
-        let matchesPrice = productPrice >= minPrice && productPrice <= maxPrice;
-
-        // Show product only if it matches all active filters
-        const shouldShow = matchesSearch && matchesCategory &&
-            matchesCarModel && matchesManufacturer &&
-            matchesPrice;
-
-        // Add animation for smooth transition
-        if (shouldShow) {
-            product.style.display = 'block';
-            product.style.animation = 'slideIn 0.3s ease-out';
-        } else {
-            product.style.display = 'none';
-        }
-    });
-
-    // Show message if no products found
-    const visibleProducts = document.querySelectorAll('.product-card[style="display: block"]');
-    const noResultsMsg = document.getElementById('no-results-message') || document.createElement('div');
-    noResultsMsg.id = 'no-results-message';
-
-    if (visibleProducts.length === 0) {
-        noResultsMsg.textContent = 'No products found matching your criteria';
-        noResultsMsg.style.textAlign = 'center';
-        noResultsMsg.style.padding = '2rem';
-        noResultsMsg.style.color = 'var(--dark)';
-        document.querySelector('.products-grid').appendChild(noResultsMsg);
-    } else if (noResultsMsg.parentElement) {
-        noResultsMsg.remove();
-    }
+    location.href = `http://localhost:8080/?search=${searchTerm}&categoryId=${categoryId}`
+    + `&carModelId=${carModelId}&manufacturerId=${manufacturerId}`
+    + `&minPrice=${minPrice}&maxPrice=${maxPrice}`;
 }
 
 // Add debounce to prevent too frequent search updates

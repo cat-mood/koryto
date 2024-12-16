@@ -69,4 +69,8 @@ public class PartService {
         if (user.getCarId() == 0) return List.of();
         return dao.getByCarId(user.getCarId());
     }
+
+    public List<PartView> search(SearchParameters params) throws Exception {
+        return dao.search(params);
+    }
 }
