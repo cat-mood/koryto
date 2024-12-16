@@ -26,6 +26,7 @@ public class PartView implements Comparable<PartView> {
     Integer carBrandId;
     Integer carModelId;
     Double price;
+    Integer carId;
 
     @Override
     public int compareTo(PartView o) {

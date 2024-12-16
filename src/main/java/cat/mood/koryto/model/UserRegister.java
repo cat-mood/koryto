@@ -21,6 +21,6 @@ public class UserRegister {
     Short postIndex;
     Integer carId;
     String email;
-    String carBrandName;
-    String carModelName;
+    Integer carBrandId;
+    Integer carModelId;
 }

@@ -2,6 +2,8 @@ package cat.mood.koryto.repository;
 
 import cat.mood.koryto.config.DatabaseConfig;
 import cat.mood.koryto.model.Car;
+import cat.mood.koryto.model.CarBrand;
+import cat.mood.koryto.model.CarModel;
 import cat.mood.koryto.model.CarView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,21 +48,28 @@ public class CarDAO {
         );
     }
 
-    public List<String> getAllBrands() throws SQLException {
-        List<String> brands = new ArrayList<>();
+    public List<CarBrand> getAllBrands() throws SQLException {
+        List<CarBrand> brands = new ArrayList<>();
 
+        // language=PostgreSQL
         String query = """
                 SELECT
-                car_brand_name
+                    car_brand_id,
+                    car_brand_name
                 FROM
-                car_brands;
+                    car_brands;
                 """;
 
         try (Connection connection = userSource.getConnection()) {
             try (Statement statement = connection.createStatement()) {
                 ResultSet resultSet = statement.executeQuery(query);
                 while (resultSet.next()) {
-                    brands.add(resultSet.getString(1));
+                    CarBrand brand = new CarBrand(
+                            resultSet.getInt("car_brand_id"),
+                            resultSet.getString("car_brand_name")
+                    );
+
+                    brands.add(brand);
                 }
             }
         }
@@ -68,23 +77,29 @@ public class CarDAO {
         return brands;
     }
 
-    public List<String> getModelsByBrand(String brand) throws SQLException {
-        List<String> models = new ArrayList<>();
+    public List<CarModel> getModelsByBrandId(int brandId) throws SQLException {
+        List<CarModel> models = new ArrayList<>();
 
+        // language = PostgreSQL
         String query = """
                 SELECT
-                car_model_name
+                    car_model_id,
+                    car_model_name
                 FROM
-                cars_view
-                WHERE car_brand_name = ?;
+                    cars_view
+                WHERE car_brand_id = ?;
                 """;
 
         try (Connection connection = userSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setString(1, brand);
+                statement.setInt(1, brandId);
                 ResultSet resultSet = statement.executeQuery();
                 while (resultSet.next()) {
-                    models.add(resultSet.getString(1));
+                    CarModel model = new CarModel(
+                            resultSet.getInt("car_model_id"),
+                            resultSet.getString("car_model_name")
+                    );
+                    models.add(model);
                 }
             }
         }

@@ -20,7 +20,7 @@ public class UserService {
     final CarService carService;
 
     User toUser(UserRegister user) throws Exception {
-        Car car = carService.getCarByBrandNameAndModelName(user.getCarBrandName(), user.getCarModelName());
+        Car car = carService.getCarByBrandAndModel(user.getCarBrandId(), user.getCarModelId());
 
         return new User(
                 0,

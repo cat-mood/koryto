@@ -1,5 +1,7 @@
 package cat.mood.koryto.controller;
 
+import cat.mood.koryto.model.CarBrand;
+import cat.mood.koryto.model.CarModel;
 import cat.mood.koryto.service.CarService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +22,8 @@ public class CarController {
     final CarService carService;
 
     @GetMapping("/brands")
-    public ResponseEntity<List<String>> getBrands() {
-        List<String> brands;
+    public ResponseEntity<List<CarBrand>> getBrands() {
+        List<CarBrand> brands;
 
         try {
             brands = carService.getAllBrands();
@@ -34,10 +36,10 @@ public class CarController {
     }
 
     @GetMapping("/models")
-    public ResponseEntity<List<String>> getModelsByBrand(@RequestParam String brand) {
-        List<String> models;
+    public ResponseEntity<List<CarModel>> getModelsByBrand(@RequestParam int brandId) {
+        List<CarModel> models;
         try {
-            models = carService.getModelsByBrand(brand);
+            models = carService.getModelsByBrand(brandId);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseEntity.internalServerError().build();

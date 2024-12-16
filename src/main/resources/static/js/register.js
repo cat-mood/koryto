@@ -11,8 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
             brandDropdown.innerHTML = '<option value="">Выберите бренд</option>';
             brands.forEach(brand => {
                 const option = document.createElement("option");
-                option.value = brand;
-                option.textContent = brand;
+                option.value = brand.carBrandId;
+                option.textContent = brand.carBrandName;
                 brandDropdown.appendChild(option);
             });
         })
@@ -27,13 +27,13 @@ function fetchModels() {
     modelsDropdown.innerHTML = '<option value="">Выберите модель</option>';
 
     if (brand) {
-        fetch(`/api/cars/models?brand=${brand}`)
+        fetch(`/api/cars/models?brandId=${brand}`)
             .then(response => response.json())
             .then(models => {
                 models.forEach(model => {
                     const option = document.createElement("option");
-                    option.value = model;
-                    option.textContent = model;
+                    option.value = model.carModelId;
+                    option.textContent = model.carModelName;
                     modelsDropdown.appendChild(option);
                 });
             })

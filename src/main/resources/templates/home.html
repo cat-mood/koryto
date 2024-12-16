@@ -22,11 +22,65 @@
                 </svg>
                 <span class="cart-count" th:text="${cartSize}">0</span>
             </button>
+            <a href="/admin" class="admin-btn" style="display: flex;" th:if="${user.getRole() == 'ROLE_ADMIN'}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+                </svg>
+                Admin Panel
+            </a>
+            <button class="logout-btn" onclick="location.href='/logout'">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                    <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                </svg>
+                Logout
+            </button>
         </div>
     </div>
 </header>
 
 <main>
+    <section class="search-section">
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="Search for parts...">
+            <button class="search-button">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                    <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+                Search
+            </button>
+        </div>
+        <div class="filters">
+            <div class="filter-group">
+                <label>Category</label>
+                <select class="filter-select" id="category">
+                    <option value="">All Categories</option>
+                    <option th:each="category:${categories}" th:value="${category.getCategoryId()}" th:text="${category.getCategoryName()}">Category</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Car Brand</label>
+                <select class="filter-select" id="carBrand">
+                    <option value="">All Brands</option>
+                    <option th:each="brand:${brands}" th:value="${brand}" th:text="${brand}">Brand</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Manufacturer</label>
+                <select class="filter-select" id="manufacturer">
+                    <option value="">All Manufacturers</option>
+                    <option th:each="manufacturer:${manufacturers}" th:value="${manufacturer.getManufacturerId()}" th:text="${manufacturer.getManufacturerName()}">Manufacturer</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Price Range</label>
+                <div class="price-range">
+                    <input type="number" class="price-input" placeholder="Min" id="minPrice" min="0">
+                    <input type="number" class="price-input" placeholder="Max" id="maxPrice" min="0">
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section th:if="${!recommended.isEmpty()}">
         <h2 class="section-title">Recommended for You</h2>
         <div class="products-grid">

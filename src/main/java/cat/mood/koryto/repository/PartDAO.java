@@ -44,7 +44,8 @@ public class PartDAO {
                 resultSet.getInt("manufacturer_id"),
                 resultSet.getInt("car_brand_id"),
                 resultSet.getInt("car_model_id"),
-                resultSet.getDouble("price")
+                resultSet.getDouble("price"),
+                resultSet.getInt("car_id")
         );
     }
 
@@ -65,7 +66,8 @@ public class PartDAO {
                     manufacturer_id,
                     car_brand_id,
                     car_model_id,
-                    price
+                    price,
+                    car_id
                 FROM
                     parts_view;
                 """;
@@ -99,7 +101,8 @@ public class PartDAO {
                     manufacturer_id,
                     car_brand_id,
                     car_model_id,
-                    price
+                    price,
+                    car_id
                 FROM
                     parts_view
                 WHERE part_id = ?;
@@ -168,6 +171,7 @@ public class PartDAO {
     }
 
     public List<PartView> getByBrandAndModel(int brandId, int modelId) throws SQLException {
+        log.debug("brandId: {}, modelId: {}", brandId, modelId);
         List<PartView> parts = new ArrayList<>();
         String query = """
                 SELECT
@@ -184,7 +188,8 @@ public class PartDAO {
                     manufacturer_id,
                     car_brand_id,
                     car_model_id,
-                    price
+                    price,
+                    car_id
                 FROM
                     parts_view
                 WHERE car_brand_id = ? AND car_model_id = ?;
@@ -199,6 +204,45 @@ public class PartDAO {
                 while (resultSet.next()) {
                     PartView part = buildPartView(resultSet);
                     parts.add(part);
+                }
+            }
+        }
+
+        return parts;
+    }
+
+    public List<PartView> getByCarId(int carId) throws SQLException {
+        List<PartView> parts = new ArrayList<>();
+        //language=PostgreSQL
+        String query = """
+                SELECT
+                    part_name,
+                    category_name,
+                    manufacturer_name,
+                    manufacturer_address,
+                    manufacturer_phone_number,
+                    car_brand_name,
+                    car_model_name,
+                    part_description,
+                    part_id,
+                    category_id,
+                    manufacturer_id,
+                    car_brand_id,
+                    car_model_id,
+                    price,
+                    car_id
+                FROM
+                    parts_view
+                WHERE car_id = ?;
+                """;
+
+        try (Connection connection = userSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setInt(1, carId);
+
+                ResultSet resultSet = statement.executeQuery();
+                while (resultSet.next()) {
+                    PartView part = buildPartView(resultSet);
                 }
             }
         }

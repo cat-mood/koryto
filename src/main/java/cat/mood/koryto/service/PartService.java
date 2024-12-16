@@ -66,9 +66,7 @@ public class PartService {
 
     public List<PartView> getRecommended(User user) throws Exception {
         log.debug("PartService.getRecommended(): {}", user.toString());
-        Car car = carService.getByUser(user);
-        if (car == null) return List.of();
-        log.debug("PartService.getRecommended(): car = {}", car.getCarId());
-        return dao.getByBrandAndModel(car.getCarBrandId(), car.getCarModelId());
+        if (user.getCarId() == 0) return List.of();
+        return dao.getByCarId(user.getCarId());
     }
 }

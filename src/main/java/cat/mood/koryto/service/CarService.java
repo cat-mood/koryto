@@ -1,8 +1,6 @@
 package cat.mood.koryto.service;
 
-import cat.mood.koryto.model.Car;
-import cat.mood.koryto.model.CarView;
-import cat.mood.koryto.model.User;
+import cat.mood.koryto.model.*;
 import cat.mood.koryto.repository.CarDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,12 +12,12 @@ import java.util.List;
 public class CarService {
     final CarDAO carDAO;
 
-    public List<String> getAllBrands() throws Exception {
+    public List<CarBrand> getAllBrands() throws Exception {
         return carDAO.getAllBrands();
     }
 
-    public List<String> getModelsByBrand(String brand) throws Exception {
-        return carDAO.getModelsByBrand(brand);
+    public List<CarModel> getModelsByBrand(int brandId) throws Exception {
+        return carDAO.getModelsByBrandId(brandId);
     }
 
     public Car getCarByBrandNameAndModelName(String brand, String modelName) throws Exception {
