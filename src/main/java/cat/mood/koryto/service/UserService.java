@@ -19,7 +19,7 @@ public class UserService {
     final PasswordEncoder passwordEncoder;
     final CarService carService;
 
-    User toUser(UserRegister user) {
+    User toUser(UserRegister user) throws Exception {
         Car car = carService.getCarByBrandNameAndModelName(user.getCarBrandName(), user.getCarModelName());
 
         return new User(
@@ -39,23 +39,23 @@ public class UserService {
         );
     }
 
-    public Optional<User> getUserByUsername(String username) {
+    public Optional<User> getUserByUsername(String username) throws Exception {
         return userDAO.getUserByUsername(username);
     }
 
-    public List<User> getAll() {
+    public List<User> getAll() throws Exception {
         return userDAO.getAll();
     }
 
-    public User getUserById(int id) {
+    public User getUserById(int id) throws Exception {
         return userDAO.getUserById(id);
     }
 
-    public void updateRole(int id, String role) {
+    public void updateRole(int id, String role) throws Exception {
         userDAO.updateRoleById(id, role);
     }
 
-    public void registerUser(UserRegister userRegister) throws UserExist {
+    public void registerUser(UserRegister userRegister) throws Exception {
         Optional<User> foundUser = userDAO.getUserByUsername(userRegister.getUsername());
         if (foundUser.isPresent()) {
             throw new UserExist();
@@ -66,7 +66,7 @@ public class UserService {
         userDAO.insertUser(user);
     }
 
-    public void deleteUser(int id) {
+    public void deleteUser(int id) throws Exception {
         userDAO.deleteUser(id);
     }
 }

@@ -17,15 +17,15 @@ public class PartService {
     final ManufacturerService manufacturerService;
     final CarService carService;
 
-    public List<PartView> getAll() {
+    public List<PartView> getAll() throws Exception {
         return dao.getAll();
     }
 
-    public PartView getById(int id) {
+    public PartView getById(int id) throws Exception {
         return dao.getById(id);
     }
 
-    Part toPart(PartView partView) {
+    Part toPart(PartView partView) throws Exception {
         Category category = categoryService.getByName(partView.getCategoryName());
         Manufacturer manufacturer = manufacturerService.getByName(partView.getManufacturerName());
         Car car;
@@ -46,25 +46,25 @@ public class PartService {
         );
     }
 
-    public void add(PartView partView) {
+    public void add(PartView partView) throws Exception {
         Part part = toPart(partView);
         add(part);
     }
 
-    public void add(Part part) {
+    public void add(Part part) throws Exception {
         dao.add(part);
     }
 
-    public void update(PartView partView) {
+    public void update(PartView partView) throws Exception {
         Part part = toPart(partView);
         update(part);
     }
 
-    public void update(Part part) {
+    public void update(Part part) throws Exception {
         dao.update(part);
     }
 
-    public List<PartView> getRecommended(User user) {
+    public List<PartView> getRecommended(User user) throws Exception {
         log.debug("PartService.getRecommended(): {}", user.toString());
         Car car = carService.getByUser(user);
         if (car == null) return List.of();

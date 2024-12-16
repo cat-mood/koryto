@@ -14,11 +14,11 @@ import java.util.List;
 public class CategoryService {
     final CategoryDAO categoryDAO;
 
-    public List<Category> getAll() {
+    public List<Category> getAll() throws Exception {
         return categoryDAO.getAll();
     }
 
-    public Category getByName(String name) {
+    public Category getByName(String name) throws Exception {
         return categoryDAO.getByName(name);
     }
 }

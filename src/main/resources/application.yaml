@@ -14,9 +14,12 @@ logging:
 cat:
   mood:
     koryto:
-      host: ${DB_HOST}
-      name: ${DB_NAME}
-      user: ${DB_USER}
-      password: ${DB_PASSWORD}
-      port: ${DB_PORT}
-
+      datasource:
+        host: ${DB_HOST}
+        name: ${DB_NAME}
+        admin: ${DB_USER}
+        adminPassword: ${DB_PASSWORD}
+        port: ${DB_PORT}
+        maxPoolSize: 10
+        user: regular_user
+        userPassword: regular_password

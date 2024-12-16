@@ -5,29 +5,27 @@ import cat.mood.koryto.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-@RequiredArgsConstructor
 @Slf4j
 public class OrderDAO {
-    Connection connection;
+    final DataSource adminSource;
+    final DataSource userSource;
 
     @Autowired
-    public OrderDAO(DatabaseConfig databaseConfig) {
-        try {
-            connection = DriverManager.getConnection(
-                    databaseConfig.getURL(),
-                    databaseConfig.getUser(),
-                    databaseConfig.getPassword()
-            );
-        } catch (SQLException e) {
-            log.error("OrderDAO.OrderDAO: {}", e.getMessage());
-        }
+    public OrderDAO(
+            @Qualifier("adminDataSource") DataSource adminSource,
+            @Qualifier("userDataSource") DataSource userSource
+    ) {
+        this.adminSource = adminSource;
+        this.userSource = userSource;
     }
 
     OrdersView buildOrdersView(ResultSet resultSet) throws SQLException {
@@ -47,7 +45,7 @@ public class OrderDAO {
         );
     }
 
-    public List<OrdersView> getOrdersByUserId(int userId) {
+    public List<OrdersView> getOrdersByUserId(int userId) throws SQLException {
         List<OrdersView> orders = new ArrayList<>();
         String query = """
                 SELECT
@@ -67,22 +65,21 @@ public class OrderDAO {
                     orders_view
                 WHERE user_id = ?;
                 """;
+        try (Connection connection = userSource.getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, userId);
+                ResultSet resultSet = preparedStatement.executeQuery();
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, userId);
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                orders.add(buildOrdersView(resultSet));
+                while (resultSet.next()) {
+                    orders.add(buildOrdersView(resultSet));
+                }
             }
-        } catch (SQLException e) {
-            log.error("OrderDAO.getOrdersByUserId: {}", e.getMessage());
         }
 
         return orders;
     }
 
-    public void deleteOrder(int orderId) {
+    public void deleteOrder(int orderId) throws SQLException {
         //language=PostgreSQL
         String query = """
                 DELETE FROM orders WHERE order_id = ?;
@@ -90,14 +87,13 @@ public class OrderDAO {
                 """;
 
         int rows = 0;
+        try (Connection connection = adminSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setInt(1, orderId);
+                statement.setInt(2, orderId);
 
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, orderId);
-            statement.setInt(2, orderId);
-
-            rows = statement.executeUpdate();
-        } catch (SQLException e) {
-            log.error("OrderDAO.deleteOrder: {}", e.getMessage());
+                rows = statement.executeUpdate();
+            }
         }
 
         log.info("OrderDAO.deleteOrder: {} rows affected", rows);
@@ -111,17 +107,18 @@ public class OrderDAO {
                 """;
 
         int[] result = null;
+        try (Connection connection = userSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(insertParts)) {
+                for (OrderBody orderBody : orderBodyList) {
+                    statement.setInt(1, orderBody.getOrderId());
+                    statement.setInt(2, orderBody.getPartId());
+                    statement.setDouble(3, orderBody.getAmount());
 
-        try (PreparedStatement statement = connection.prepareStatement(insertParts)) {
-            for (OrderBody orderBody : orderBodyList) {
-                statement.setInt(1, orderBody.getOrderId());
-                statement.setInt(2, orderBody.getPartId());
-                statement.setDouble(3, orderBody.getAmount());
+                    statement.addBatch();
+                }
 
-                statement.addBatch();
+                result = statement.executeBatch();
             }
-
-            result = statement.executeBatch();
         }
 
         log.info("OrderDAO.createOrderBody: {} rows affected", result.length);
@@ -137,15 +134,16 @@ public class OrderDAO {
                 """;
 
         int id = 0;
+        try (Connection connection = userSource.getConnection()) {
+            try (PreparedStatement preparedStatement = connection.prepareStatement(insertOrder)) {
+                preparedStatement.setInt(1, order.getUserId());
+                preparedStatement.setDouble(2, order.getCost());
+                preparedStatement.setTimestamp(3, order.getCreatedAt());
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(insertOrder)) {
-            preparedStatement.setInt(1, order.getUserId());
-            preparedStatement.setDouble(2, order.getCost());
-            preparedStatement.setTimestamp(3, order.getCreatedAt());
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                id = resultSet.getInt("order_id");
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    id = resultSet.getInt("order_id");
+                }
             }
         }
 

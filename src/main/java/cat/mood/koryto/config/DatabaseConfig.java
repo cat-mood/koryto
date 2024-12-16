@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties("cat.mood.koryto")
+@ConfigurationProperties("cat.mood.koryto.database")
 @Data
 public class DatabaseConfig {
     private String host;

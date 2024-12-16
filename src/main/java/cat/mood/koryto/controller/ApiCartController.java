@@ -17,34 +17,51 @@ public class ApiCartController {
     final CartService cartService;
 
     @PostMapping("/add-part-to-cart")
-    public ResponseEntity<Void> addPartToCart(@RequestBody Cart cart, @AuthenticationPrincipal User user) {
+    public ResponseEntity<String> addPartToCart(@RequestBody Cart cart, @AuthenticationPrincipal User user) {
         cart.setUserId(user.getUserId());
         log.debug("ApiCartController.addPartToCart(): {}", cart);
-        cartService.addPartToCart(cart);
+        try {
+            cartService.addPartToCart(cart);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
 
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/update-part")
-    public ResponseEntity<Void> updatePart(@RequestBody Cart cart, @AuthenticationPrincipal User user) {
+    public ResponseEntity<String> updatePart(@RequestBody Cart cart, @AuthenticationPrincipal User user) {
         cart.setUserId(user.getUserId());
-        cartService.updateCart(cart);
+        try {
+            cartService.updateCart(cart);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
 
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/delete-part")
-    public ResponseEntity<Void> deletePart(@RequestBody Cart cart, @AuthenticationPrincipal User user) {
+    public ResponseEntity<String> deletePart(@RequestBody Cart cart, @AuthenticationPrincipal User user) {
         cart.setUserId(user.getUserId());
-        cartService.deleteCart(cart);
+        try {
+            cartService.deletePart(cart);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
 
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/get-total")
-    public ResponseEntity<Double> getCartTotalByUserId(@RequestParam int id) {
-        double total = cartService.getTotal(id);
+    public ResponseEntity<String> getCartTotalByUserId(@RequestParam int id) {
+        double total = 0;
+        try {
+            total = cartService.getTotal(id);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
 
-        return ResponseEntity.ok(total);
+        return ResponseEntity.ok(Double.toString(total));
     }
 }

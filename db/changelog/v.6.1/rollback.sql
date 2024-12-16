@@ -1,0 +1,1 @@
+REVOKE ALL ON ALL TABLES IN SCHEMA public FROM regular_user;

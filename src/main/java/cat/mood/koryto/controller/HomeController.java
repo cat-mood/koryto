@@ -21,10 +21,15 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model, @AuthenticationPrincipal User user) {
-        model.addAttribute("parts", partService.getAll());
-        model.addAttribute("user", user);
-        model.addAttribute("recommended", partService.getRecommended(user));
-        model.addAttribute("cartSize", cartService.getCartSizeByUserId(user.getUserId()));
+        try {
+            model.addAttribute("parts", partService.getAll());
+            model.addAttribute("user", user);
+            model.addAttribute("recommended", partService.getRecommended(user));
+            model.addAttribute("cartSize", cartService.getCartSizeByUserId(user.getUserId()));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return "redirect:/error";
+        }
 
         return "home";
     }

@@ -36,15 +36,15 @@ public class OrderService {
         return new ArrayList<>(onlyOrders);
     }
 
-    public List<OrdersView> getOrdersByUserId(int userId) {
+    public List<OrdersView> getOrdersByUserId(int userId) throws Exception {
         return orderDao.getOrdersByUserId(userId);
     }
 
-    public int createOrder(Order order) throws SQLException {
+    public int createOrder(Order order) throws Exception {
         return orderDao.createOrder(order);
     }
 
-    public void createOrderBody(List<OrderBody> orderBodies) throws SQLException {
+    public void createOrderBody(List<OrderBody> orderBodies) throws Exception {
         orderDAO.createOrderBody(orderBodies);
     }
 }

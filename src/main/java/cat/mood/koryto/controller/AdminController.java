@@ -27,43 +27,72 @@ public class AdminController {
 
     @GetMapping
     public String admin(Model model) {
-        List<PartView> parts = partService.getAll();
+        List<PartView> parts;
+        List<User> users;
+        try {
+            parts = partService.getAll();
+            users = userService.getAll();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            parts = Collections.emptyList();
+            users = Collections.emptyList();
+            return "redirect:/error";
+        }
         Collections.sort(parts);
         model.addAttribute("parts", parts);
-        List<User> users = userService.getAll();
         model.addAttribute("users", users);
         return "admin";
     }
 
     @PostMapping("/add-part")
     @ResponseBody
-    public ResponseEntity<Void> addPart(@Valid @RequestBody PartView partView) {
-        partService.add(partView);
+    public ResponseEntity<String> addPart(@Valid @RequestBody PartView partView) {
+        try {
+            partService.add(partView);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
 
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/update-part")
     @ResponseBody
-    public ResponseEntity<Void> updatePart(@Valid @RequestBody PartView partView) {
-        partService.update(partView);
+    public ResponseEntity<String> updatePart(@Valid @RequestBody PartView partView) {
+        try {
+            partService.update(partView);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
 
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/update-role")
     @ResponseBody
-    public ResponseEntity<Void> updateUser(@Valid @RequestBody User user) {
+    public ResponseEntity<String> updateUser(@Valid @RequestBody User user) {
         log.info(user.toString());
-        userService.updateRole(user.getUserId(), user.getRole());
+        try {
+            userService.updateRole(user.getUserId(), user.getRole());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
 
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/delete-user")
     @ResponseBody
-    public ResponseEntity<Void> deleteUser(@Valid @RequestBody Map<String, Integer> id) {
-        userService.deleteUser(id.get("id"));
+    public ResponseEntity<String> deleteUser(@Valid @RequestBody Map<String, Integer> id) {
+        try {
+            userService.deleteUser(id.get("id"));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
 
         return ResponseEntity.ok().build();
     }

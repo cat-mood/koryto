@@ -19,10 +19,15 @@ public class CartController {
 
     @GetMapping
     public String cart(Model model, @AuthenticationPrincipal User user) {
-        model.addAttribute("parts", cartService.getCartByUserId(user.getUserId()));
-        model.addAttribute("user", user);
-        model.addAttribute("total", cartService.getTotal(user.getUserId()));
-        model.addAttribute("cartSize", cartService.getCartSizeByUserId(user.getUserId()));
+        try {
+            model.addAttribute("parts", cartService.getCartByUserId(user.getUserId()));
+            model.addAttribute("user", user);
+            model.addAttribute("total", cartService.getTotal(user.getUserId()));
+            model.addAttribute("cartSize", cartService.getCartSizeByUserId(user.getUserId()));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return "redirect:/error";
+        }
 
         return "cart";
     }

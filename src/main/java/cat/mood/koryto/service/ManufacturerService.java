@@ -12,11 +12,11 @@ import java.util.List;
 public class ManufacturerService {
     final ManufacturerDAO manufacturerDAO;
 
-    public List<Manufacturer> getAll() {
+    public List<Manufacturer> getAll() throws Exception {
         return manufacturerDAO.getAll();
     }
 
-    public Manufacturer getByName(String name) {
+    public Manufacturer getByName(String name) throws Exception {
         return manufacturerDAO.getByName(name);
     }
 }

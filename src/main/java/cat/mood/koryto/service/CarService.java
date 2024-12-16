@@ -14,23 +14,23 @@ import java.util.List;
 public class CarService {
     final CarDAO carDAO;
 
-    public List<String> getAllBrands() {
+    public List<String> getAllBrands() throws Exception {
         return carDAO.getAllBrands();
     }
 
-    public List<String> getModelsByBrand(String brand) {
+    public List<String> getModelsByBrand(String brand) throws Exception {
         return carDAO.getModelsByBrand(brand);
     }
 
-    public Car getCarByBrandNameAndModelName(String brand, String modelName) {
+    public Car getCarByBrandNameAndModelName(String brand, String modelName) throws Exception {
         return carDAO.getCarByBrandNameAndModelName(brand, modelName);
     }
 
-    public Car getCarByBrandAndModel(int brandId, int modelId) {
+    public Car getCarByBrandAndModel(int brandId, int modelId) throws Exception {
         return carDAO.getCarByBrandAndModel(brandId, modelId);
     }
 
-    public Car getByUser(User user) {
+    public Car getByUser(User user) throws Exception {
         return carDAO.getCarById(user.getCarId());
     }
 }

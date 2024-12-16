@@ -33,6 +33,8 @@ public class AuthController {
             userService.registerUser(user);
         } catch (UserExist e) {
             return "redirect:/register?error=1";
+        } catch (Exception e) {
+            return "redirect:/error";
         }
 
         return "redirect:/";

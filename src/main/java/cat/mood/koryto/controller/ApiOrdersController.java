@@ -31,7 +31,7 @@ public class ApiOrdersController {
             orderId = orderService.createOrder(order);
         } catch (Exception e) {
             log.error(e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
 
         log.debug("Created order with id {}", orderId);
@@ -44,7 +44,7 @@ public class ApiOrdersController {
         try {
             orderService.createOrderBody(orderBodies);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
 
         return ResponseEntity.ok().build();

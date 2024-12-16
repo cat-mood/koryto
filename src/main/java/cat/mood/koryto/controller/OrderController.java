@@ -24,13 +24,17 @@ public class OrderController {
 
     @GetMapping
     public String orders(Model model, @AuthenticationPrincipal User user) {
-        List<OrdersView> ordersViews = orderService.getOrdersByUserId(user.getUserId());
-        List<Order> onlyOrders = orderService.getOnlyOrders(ordersViews);
-        onlyOrders.sort(Order.timestampComparator);
-        model.addAttribute("onlyOrders", onlyOrders);
-        model.addAttribute("fullOrders", ordersViews);
-        model.addAttribute("user", user);
-        model.addAttribute("cartSize", cartService.getCartSizeByUserId(user.getUserId()));
+        try {
+            List<OrdersView> ordersViews = orderService.getOrdersByUserId(user.getUserId());
+            List<Order> onlyOrders = orderService.getOnlyOrders(ordersViews);
+            onlyOrders.sort(Order.timestampComparator);
+            model.addAttribute("onlyOrders", onlyOrders);
+            model.addAttribute("fullOrders", ordersViews);
+            model.addAttribute("user", user);
+            model.addAttribute("cartSize", cartService.getCartSizeByUserId(user.getUserId()));
+        } catch (Exception e) {
+            return "redirect:/error";
+        }
 
         return "orders";
     }

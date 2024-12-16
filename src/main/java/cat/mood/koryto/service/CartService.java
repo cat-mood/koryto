@@ -15,15 +15,15 @@ import java.util.List;
 public class CartService {
     final CartDAO cartDAO;
 
-    public List<CartView> getCartByUserId(int userId) {
+    public List<CartView> getCartByUserId(int userId) throws Exception {
         return cartDAO.getCartByUserId(userId);
     }
 
-    public void addPartToCart(Cart cart) {
+    public void addPartToCart(Cart cart) throws Exception {
         cartDAO.addPartToCart(cart);
     }
 
-    public int getCartSizeByUserId(int userId) {
+    public int getCartSizeByUserId(int userId) throws Exception {
         List<CartView> cart = cartDAO.getCartByUserId(userId);
         int size = 0;
 
@@ -34,15 +34,15 @@ public class CartService {
         return size;
     }
 
-    public void updateCart(Cart cart) {
+    public void updateCart(Cart cart) throws Exception {
         cartDAO.updatePart(cart);
     }
 
-    public void deleteCart(Cart cart) {
+    public void deletePart(Cart cart) throws Exception {
         cartDAO.deletePart(cart);
     }
 
-    public double getTotal(int userId) {
+    public double getTotal(int userId) throws Exception {
         List<CartView> cart = cartDAO.getCartByUserId(userId);
         double total = 0;
         for (CartView cartView : cart) {
