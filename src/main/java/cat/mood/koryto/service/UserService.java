@@ -4,12 +4,12 @@ import cat.mood.koryto.exception.UserExist;
 import cat.mood.koryto.model.Car;
 import cat.mood.koryto.model.User;
 import cat.mood.koryto.model.UserRegister;
+import cat.mood.koryto.model.UsersStatistic;
 import cat.mood.koryto.repository.UserDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,5 +74,9 @@ public class UserService {
 
     public void deleteUser(int id) throws Exception {
         userDAO.deleteUser(id);
+    }
+
+    public List<UsersStatistic> getUsersStatistics() throws Exception {
+        return userDAO.getUsersStatistics();
     }
 }

@@ -1,8 +1,6 @@
 package cat.mood.koryto.repository;
 
-import cat.mood.koryto.config.DatabaseConfig;
 import cat.mood.koryto.model.*;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -148,5 +146,38 @@ public class OrderDAO {
         }
 
         return id;
+    }
+
+    public List<OrdersStatistic> getOrdersStatistics() throws SQLException {
+        // language=PostgreSQL
+        String query = """
+                SELECT
+                    part_id,
+                    part_name,
+                    sold_amount,
+                    income
+                FROM
+                    orders_statistics;
+                """;
+        List<OrdersStatistic> ordersStatistics = new ArrayList<>();
+
+        try (Connection connection = adminSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                ResultSet resultSet = statement.executeQuery();
+
+                while (resultSet.next()) {
+                    OrdersStatistic ordersStatistic = new OrdersStatistic(
+                            resultSet.getInt("part_id"),
+                            resultSet.getString("part_name"),
+                            resultSet.getLong("sold_amount"),
+                            resultSet.getDouble("income")
+                    );
+
+                    ordersStatistics.add(ordersStatistic);
+                }
+            }
+        }
+
+        return ordersStatistics;
     }
 }

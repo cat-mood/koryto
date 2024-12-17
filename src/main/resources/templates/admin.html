@@ -14,6 +14,8 @@
     </div>
     <div class="nav-item active" data-panel="products">Parts Management</div>
     <div class="nav-item" data-panel="users">Users Management</div>
+    <div class="nav-item" data-panel="orders-stats">Orders Statistics</div>
+    <div class="nav-item" data-panel="users-stats">Users Statistics</div>
 </div>
 
 <div class="main-content">
@@ -77,6 +79,50 @@
                         </div>
                         <button class="btn btn-danger" th:attr="onclick=|deleteUser(${user.getUserId()})|">Delete</button>
                     </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="orders-stats" class="panel">
+        <h2>Orders Statistics</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Part ID</th>
+                <th>Part Name</th>
+                <th>Sold Amount</th>
+                <th>Income</th>
+            </tr>
+            </thead>
+            <tbody id="ordersStatsTable" th:each="stat:${ordersStatistics}">
+                <tr>
+                    <td th:text="${stat.getPartId()}">Part ID</td>
+                    <td th:text="${stat.getPartName()}">Part Name</td>
+                    <td th:text="${stat.getSoldAmount()}">Sold Amount</td>
+                    <td th:text="${stat.getIncome()}">Income</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="users-stats" class="panel">
+        <h2>Users Statistics</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Username</th>
+                <th>Average Order Size</th>
+                <th>Total Income</th>
+            </tr>
+            </thead>
+            <tbody id="usersStatsTable" th:each="stat:${usersStatistics}">
+                <tr>
+                    <td th:text="${stat.getUserId()}">User ID</td>
+                    <td th:text="${stat.getUsername()}">Username</td>
+                    <td th:text="${stat.getAverageOrderSize()}">Average order size</td>
+                    <td th:text="${stat.getTotalIncome()}">Total Income</td>
                 </tr>
             </tbody>
         </table>

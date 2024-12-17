@@ -1,9 +1,7 @@
 package cat.mood.koryto.repository;
 
-import cat.mood.koryto.config.DatabaseConfig;
 import cat.mood.koryto.model.User;
-import cat.mood.koryto.model.UserRegister;
-import lombok.RequiredArgsConstructor;
+import cat.mood.koryto.model.UsersStatistic;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -259,5 +256,39 @@ public class UserDAO {
                 statement.executeUpdate();
             }
         }
+    }
+
+    public List<UsersStatistic> getUsersStatistics() throws SQLException {
+        // language=PostgreSQL
+        String query = """
+                SELECT
+                    user_id,
+                    username,
+                    average_order_size,
+                    total_income
+                FROM
+                    users_statistics;
+                """;
+
+        List<UsersStatistic> usersStatistics = new ArrayList<>();
+
+        try (Connection connection = adminSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                ResultSet resultSet = statement.executeQuery();
+
+                while (resultSet.next()) {
+                    UsersStatistic usersStatistic = new UsersStatistic(
+                            resultSet.getInt("user_id"),
+                            resultSet.getString("username"),
+                            resultSet.getInt("average_order_size"),
+                            resultSet.getDouble("total_income")
+                    );
+
+                    usersStatistics.add(usersStatistic);
+                }
+            }
+        }
+
+        return usersStatistics;
     }
 }

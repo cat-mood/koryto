@@ -1,8 +1,7 @@
 package cat.mood.koryto.controller;
 
-import cat.mood.koryto.model.Part;
-import cat.mood.koryto.model.PartView;
-import cat.mood.koryto.model.User;
+import cat.mood.koryto.model.*;
+import cat.mood.koryto.service.OrderService;
 import cat.mood.koryto.service.PartService;
 import cat.mood.koryto.service.UserService;
 import jakarta.validation.Valid;
@@ -24,14 +23,19 @@ import java.util.Map;
 public class AdminController {
     final PartService partService;
     final UserService userService;
+    final OrderService orderService;
 
     @GetMapping
     public String admin(Model model) {
         List<PartView> parts;
         List<User> users;
+        List<UsersStatistic> usersStatistics;
+        List<OrdersStatistic> ordersStatistics;
         try {
             parts = partService.getAll();
             users = userService.getAll();
+            usersStatistics = userService.getUsersStatistics();
+            ordersStatistics = orderService.getOrdersStatistics();
         } catch (Exception e) {
             log.error(e.getMessage());
             parts = Collections.emptyList();
@@ -41,6 +45,9 @@ public class AdminController {
         Collections.sort(parts);
         model.addAttribute("parts", parts);
         model.addAttribute("users", users);
+        log.debug("AdminController.admin() ordersStatistics: {}", ordersStatistics);
+        model.addAttribute("usersStatistics", usersStatistics);
+        model.addAttribute("ordersStatistics", ordersStatistics);
         return "admin";
     }
 
