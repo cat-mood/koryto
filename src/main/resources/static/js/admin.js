@@ -34,14 +34,16 @@ function saveProduct(id) {
 
 }
 
-function deleteProduct(id) {
+async function deleteProduct(id) {
     if (confirm('Are you sure you want to delete this product?')) {
         // Remove product from array (replace with API call)
-        const index = products.findIndex(p => p.id === id);
-        if (index > -1) {
-            products.splice(index, 1);
-        }
-        renderProducts();
+        const response = await fetch(
+            `http://localhost:8080/api/part/delete?id=${id}`
+        );
+
+        console.error(response)
+
+        location.reload();
     }
 }
 

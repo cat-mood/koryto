@@ -46,7 +46,7 @@
                     <td th:text="${part.getCategoryName()}">Category Name</td>
                     <td>
                         <button class="btn btn-primary" th:attr="onclick=|showEditProductModal(${part.getPartId()})|">Edit</button>
-<!--                        <button class="btn btn-danger" onclick="deleteProduct(${part.id})">Delete</button>-->
+                        <button class="btn btn-danger" th:attr="onclick=|deleteProduct(${part.getPartId()})|">Delete</button>
 <!--                        <button class="btn btn-primary save-btn" style="display: none" onclick="saveProduct(${part.id})">Save</button>-->
                     </td>
                 </tr>

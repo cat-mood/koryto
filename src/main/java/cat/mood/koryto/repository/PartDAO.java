@@ -335,4 +335,23 @@ public class PartDAO {
 
         return parts;
     }
+
+    public void delete(int id) throws SQLException {
+        // language=PostgreSQL
+        String query = """
+                DELETE FROM parts WHERE part_id = ?;
+                """;
+
+        int rows = 0;
+
+        try (Connection connection = adminSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setInt(1, id);
+
+                rows = statement.executeUpdate();
+            }
+        }
+
+        log.info("PartDAO.delete(): {} rows affected", rows);
+    }
 }

@@ -43,4 +43,16 @@ public class PartController {
         }
         return ResponseEntity.ok(part);
     }
+
+    @GetMapping("/delete")
+    public ResponseEntity<String> deletePart(@RequestParam int id) {
+        try {
+            partService.delete(id);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+
+        return ResponseEntity.ok().build();
+    }
 }

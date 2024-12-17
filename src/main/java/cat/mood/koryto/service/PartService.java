@@ -73,4 +73,8 @@ public class PartService {
     public List<PartView> search(SearchParameters params) throws Exception {
         return dao.search(params);
     }
+
+    public void delete(int id) throws Exception {
+        dao.delete(id);
+    }
 }
