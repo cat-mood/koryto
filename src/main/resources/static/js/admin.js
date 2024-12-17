@@ -61,7 +61,10 @@ async function updateUser(user) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(user)
+            body: JSON.stringify({
+                "userId": user.userId,
+                "role": user.role
+            })
         }
     ).then(response => {
         if (!response.ok) {
@@ -123,8 +126,8 @@ function showAddProductModal() {
             console.log(typeof brands, brands);
             brands.forEach(brand => {
                 const option = document.createElement("option");
-                option.value = brand;
-                option.textContent = brand;
+                option.value = brand.carBrandId;
+                option.textContent = brand.carBrandName;
                 brandDropdown.appendChild(option);
                 console.log(brand, typeof brand);
             });
@@ -182,8 +185,8 @@ function handleAddProduct(event) {
         partName: document.getElementById('partName').value,
         categoryName: document.getElementById('category').value,
         manufacturerName: document.getElementById('manufacturer').value,
-        carBrandName: document.getElementById('carBrand').value,
-        carModelName: document.getElementById('carModel').value,
+        carBrandId: document.getElementById('carBrand').value,
+        carModelId: document.getElementById('carModel').value,
         partDescription: document.getElementById('description').value,
         price: parseFloat(document.getElementById('price').value)
     };
@@ -222,13 +225,13 @@ async function fetchModels() {
     modelsDropdown.innerHTML = '<option value="">Выберите модель</option>';
 
     if (brand) {
-        await fetch(`/api/cars/models?brand=${brand}`)
+        await fetch(`/api/cars/models?brandId=${brand}`)
             .then(response => response.json())
             .then(models => {
                 models.forEach(model => {
                     const option = document.createElement("option");
-                    option.value = model;
-                    option.textContent = model;
+                    option.value = model.carModelId;
+                    option.textContent = model.carModelName;
                     modelsDropdown.appendChild(option);
                 });
             })
@@ -244,13 +247,13 @@ async function fetchEditModels() {
     modelsDropdown.innerHTML = '<option value="">Выберите модель</option>';
 
     if (brand) {
-        await fetch(`/api/cars/models?brand=${brand}`)
+        await fetch(`/api/cars/models?brandId=${brand}`)
             .then(response => response.json())
             .then(models => {
                 models.forEach(model => {
                     const option = document.createElement("option");
-                    option.value = model;
-                    option.textContent = model;
+                    option.value = model.carModelId;
+                    option.textContent = model.carModelName;
                     modelsDropdown.appendChild(option);
                 });
             })
@@ -273,8 +276,8 @@ function handleEditProduct(event) {
         partName: document.getElementById('editPartName').value,
         categoryName: document.getElementById('editCategory').value,
         manufacturerName: document.getElementById('editManufacturer').value,
-        carBrandName: document.getElementById('editCarBrand').value,
-        carModelName: document.getElementById('editCarModel').value,
+        carBrandId: document.getElementById('editCarBrand').value,
+        carModelId: document.getElementById('editCarModel').value,
         partDescription: document.getElementById('editDescription').value,
         price: parseFloat(document.getElementById('editPrice').value)
     };
@@ -320,8 +323,8 @@ async function showEditProductModal(id) {
             console.log(typeof brands, brands);
             brands.forEach(brand => {
                 const option = document.createElement("option");
-                option.value = brand;
-                option.textContent = brand;
+                option.value = brand.carBrandId;
+                option.textContent = brand.carBrandName;
                 brandDropdown.appendChild(option);
                 console.log(brand, typeof brand);
             });
@@ -374,6 +377,7 @@ async function showEditProductModal(id) {
             return response.json();
         })
         .then(async product => {
+            console.log("showEditProductModel");
             // Проверяем, получили ли мы данные о продукте
             if (!product) return;
 
@@ -382,12 +386,13 @@ async function showEditProductModal(id) {
             document.getElementById('editPartName').value = product.partName;
             document.getElementById('editCategory').value = product.categoryName;
             document.getElementById('editManufacturer').value = product.manufacturerName;
-            document.getElementById('editCarBrand').value = product.carBrandName;
+            document.getElementById('editCarBrand').value = product.carBrandId;
+            console.log(document.getElementById('editCarBrand').textContent)
 
             await fetchEditModels(); // Обновляем выпадающий список моделей автомобилей
 
-            console.log(product.carModelName);
-            document.getElementById('editCarModel').value = product.carModelName;
+            console.log(product.carModelId);
+            document.getElementById('editCarModel').value = product.carModelId;
             document.getElementById('editDescription').value = product.partDescription;
             document.getElementById('editPrice').value = product.price;
 

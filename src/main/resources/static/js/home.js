@@ -34,15 +34,15 @@ const priceInputs = document.querySelectorAll('.price-input');
 function performSearch() {
     const searchTerm = searchInput.value;
     const categoryId = normalize(document.getElementById('category')?.value);
-    const carModelId = normalize(document.getElementById('carModel')?.value);
+    const carBrandId = normalize(document.getElementById('carBrand')?.value);
     const manufacturerId = normalize(document.getElementById('manufacturer')?.value);
     const minPrice = normalize(parseFloat(document.getElementById('minPrice')?.value));
     const maxPrice = normalize(parseFloat(document.getElementById('maxPrice')?.value), 'Infinity');
 
-    console.log(searchTerm, categoryId, carModelId, manufacturerId, minPrice, maxPrice);
+    console.log(searchTerm, categoryId, carBrandId, manufacturerId, minPrice, maxPrice);
 
     location.href = `http://localhost:8080/?search=${searchTerm}&categoryId=${categoryId}`
-    + `&carModelId=${carModelId}&manufacturerId=${manufacturerId}`
+    + `&carModelId=${carBrandId}&manufacturerId=${manufacturerId}`
     + `&minPrice=${minPrice}&maxPrice=${maxPrice}`;
 }
 
@@ -63,15 +63,15 @@ function debounce(func, wait) {
 const debouncedSearch = debounce(performSearch, 300);
 
 searchButton.addEventListener('click', performSearch);
-searchInput.addEventListener('input', debouncedSearch);
+// searchInput.addEventListener('input', debouncedSearch);
 searchInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') performSearch();
 });
 
-filters.forEach(filter => {
-    filter.addEventListener('change', performSearch);
-});
+// filters.forEach(filter => {
+//     filter.addEventListener('change', performSearch);
+// });
 
-priceInputs.forEach(input => {
-    input.addEventListener('input', debouncedSearch);
-});
+// priceInputs.forEach(input => {
+//     input.addEventListener('input', debouncedSearch);
+// });
