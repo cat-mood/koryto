@@ -51,7 +51,6 @@ async function deletePart(partId) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                'userId': userId,
                 'partId': partId
             })
         }

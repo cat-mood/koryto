@@ -29,7 +29,7 @@
 </header>
 
 <main>
-    <div class="empty-cart" th:if="${parts.isEmpty()}">
+    <div class="empty-cart" th:if="${parts.getItems().isEmpty()}">
         <svg width="100" height="100" viewBox="0 0 24 24" fill="#1d3557">
             <path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12zm-7-8c-1.66 0-3-1.34-3-3H7c0 2.76 2.24 5 5 5s5-2.24 5-5h-2c0 1.66-1.34 3-3 3z"/>
         </svg>
@@ -38,29 +38,29 @@
         <a href="/" class="continue-shopping">Continue Shopping</a>
     </div>
 
-    <div class="cart-container" th:if="${!parts.isEmpty()}">
+    <div class="cart-container" th:if="${!parts.getItems().isEmpty()}">
         <div class="cart-title">
             <h2>Shopping Cart</h2>
 <!--            <span>3 items</span>-->
         </div>
 
-        <div class="cart-item" th:each="part:${parts}">
+        <div class="cart-item" th:each="part:${parts.getItems()}">
             <div class="item-image">
                 <svg width="50" height="50" viewBox="0 0 24 24" fill="#1d3557">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
                 </svg>
             </div>
             <div class="item-details">
-                <h3 th:text="${part.getPartName()}">Part name</h3>
-                <p th:text="'Part #: ' + ${part.getPartId()}">Part id</p>
+                <h3 th:text="${part.getValue().getPartName()}">Part name</h3>
+                <p th:text="'Part #: ' + ${part.getKey()}">Part id</p>
             </div>
             <div class="quantity-controls">
-                <button class="quantity-btn" th:attr="onclick=|updateAmount(${part.getPartId()}, ${part.getAmount()} - 1)|">-</button>
-                <span th:text="${part.getAmount()}">0</span>
-                <button class="quantity-btn" th:attr="onclick=|updateAmount(${part.getPartId()}, ${part.getAmount()} + 1)|">+</button>
+                <button class="quantity-btn" th:attr="onclick=|updateAmount(${part.getKey()}, ${part.getValue().getAmount()} - 1)|">-</button>
+                <span th:text="${part.getValue().getAmount()}">0</span>
+                <button class="quantity-btn" th:attr="onclick=|updateAmount(${part.getKey()}, ${part.getValue().getAmount()} + 1)|">+</button>
             </div>
-            <div class="item-price" th:text="'$' + ${part.getPrice()}">Price</div>
-            <button class="delete-btn" th:attr="onclick=|deletePart(${part.getPartId()})|">×</button>
+            <div class="item-price" th:text="'$' + ${part.getValue().getPrice()}">Price</div>
+            <button class="delete-btn" th:attr="onclick=|deletePart(${part.getKey()})|">×</button>
         </div>
 
         <div class="cart-summary">

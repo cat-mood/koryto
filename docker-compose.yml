@@ -47,7 +47,18 @@ services:
       - "8080:8080"
     volumes:
       - ./src/main/resources:/app/resources
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    environment:
+      password: pswd
+    volumes:
+      - redis_data:/data   # Персистентное хранилище данных
+    command: [ "redis-server", "--appendonly", "yes", "--requirepass", pswd ]  # Включаем AOF для сохранения данных
 
 volumes:
   pgdata:
     driver: local
+  redis_data:

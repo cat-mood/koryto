@@ -6,6 +6,7 @@ import cat.mood.koryto.model.User;
 import cat.mood.koryto.service.CartService;
 import cat.mood.koryto.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/orders")
 @RequiredArgsConstructor
+@Slf4j
 public class OrderController {
     final OrderService orderService;
     final CartService cartService;
@@ -26,6 +28,7 @@ public class OrderController {
     public String orders(Model model, @AuthenticationPrincipal User user) {
         try {
             List<OrdersView> ordersViews = orderService.getOrdersByUserId(user.getUserId());
+            log.debug("Orders {}", ordersViews);
             List<Order> onlyOrders = orderService.getOnlyOrders(ordersViews);
             onlyOrders.sort(Order.timestampComparator);
             model.addAttribute("onlyOrders", onlyOrders);

@@ -1,6 +1,7 @@
 package cat.mood.koryto.controller;
 
 import cat.mood.koryto.model.Cart;
+import cat.mood.koryto.model.CartItem;
 import cat.mood.koryto.model.User;
 import cat.mood.koryto.service.CartService;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +18,9 @@ public class ApiCartController {
     final CartService cartService;
 
     @PostMapping("/add-part-to-cart")
-    public ResponseEntity<String> addPartToCart(@RequestBody Cart cart, @AuthenticationPrincipal User user) {
-        cart.setUserId(user.getUserId());
-        log.debug("ApiCartController.addPartToCart(): {}", cart);
+    public ResponseEntity<String> addPartToCart(@RequestBody CartItem cartItem, @AuthenticationPrincipal User user) {
         try {
-            cartService.addPartToCart(cart);
+            cartService.addPartToCart(cartItem, user.getUserId());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
@@ -30,9 +29,10 @@ public class ApiCartController {
     }
 
     @PostMapping("/update-part")
-    public ResponseEntity<String> updatePart(@RequestBody Cart cart, @AuthenticationPrincipal User user) {
-        cart.setUserId(user.getUserId());
+    public ResponseEntity<String> updatePart(@RequestBody CartItem cartItem, @AuthenticationPrincipal User user) {
         try {
+            Cart cart = cartService.getCartByUserId(user.getUserId());
+            cart.getItems().get(cartItem.getPartId()).setAmount(cartItem.getAmount());
             cartService.updateCart(cart);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
@@ -42,10 +42,9 @@ public class ApiCartController {
     }
 
     @PostMapping("/delete-part")
-    public ResponseEntity<String> deletePart(@RequestBody Cart cart, @AuthenticationPrincipal User user) {
-        cart.setUserId(user.getUserId());
+    public ResponseEntity<String> deletePart(@RequestBody CartItem cartItem, @AuthenticationPrincipal User user) {
         try {
-            cartService.deletePart(cart);
+            cartService.deletePart(cartItem.getPartId(), user.getUserId());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }

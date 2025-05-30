@@ -21,4 +21,22 @@ public class OrdersView {
     String partDescription;
     Double price;
     Short amount;
+
+    @Override
+    public String toString() {
+        return "OrdersView{" +
+                "orderId=" + orderId +
+                ", userId=" + userId +
+                ", cost=" + cost +
+                ", createdAt=" + createdAt +
+                ", partId=" + partId +
+                ", partName='" + partName + '\'' +
+                ", categoryId=" + categoryId +
+                ", manufacturerId=" + manufacturerId +
+                ", carId=" + carId +
+                ", partDescription='" + partDescription + '\'' +
+                ", price=" + price +
+                ", amount=" + amount +
+                '}';
+    }
 }

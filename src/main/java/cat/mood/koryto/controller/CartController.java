@@ -1,5 +1,6 @@
 package cat.mood.koryto.controller;
 
+import cat.mood.koryto.model.Cart;
 import cat.mood.koryto.model.User;
 import cat.mood.koryto.service.CartService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -20,6 +23,8 @@ public class CartController {
     @GetMapping
     public String cart(Model model, @AuthenticationPrincipal User user) {
         try {
+            int carts = cartService.getCartSizeByUserId(user.getUserId());
+            log.info("Cart {}", carts);
             model.addAttribute("parts", cartService.getCartByUserId(user.getUserId()));
             model.addAttribute("user", user);
             model.addAttribute("total", cartService.getTotal(user.getUserId()));

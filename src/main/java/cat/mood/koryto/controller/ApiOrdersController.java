@@ -34,6 +34,8 @@ public class ApiOrdersController {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
 
+
+
         log.debug("Created order with id {}", orderId);
 
         return ResponseEntity.ok(Integer.toString(orderId));
