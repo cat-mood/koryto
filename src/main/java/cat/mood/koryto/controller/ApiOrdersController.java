@@ -44,6 +44,7 @@ public class ApiOrdersController {
     @PostMapping("/create-order-body")
     public ResponseEntity<String> createOrderBody(@RequestBody List<OrderBody> orderBodies, @AuthenticationPrincipal User user) {
         try {
+            log.debug("Order bodies {}", orderBodies);
             orderService.createOrderBody(orderBodies);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());

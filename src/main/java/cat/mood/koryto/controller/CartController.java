@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -25,7 +26,12 @@ public class CartController {
         try {
             int carts = cartService.getCartSizeByUserId(user.getUserId());
             log.info("Cart {}", carts);
-            model.addAttribute("parts", cartService.getCartByUserId(user.getUserId()));
+            Cart cart = cartService.getCartByUserId(user.getUserId());
+            if (cart == null) {
+                cart = new Cart();
+                cart.setItems(Map.of());
+            }
+            model.addAttribute("parts", cart);
             model.addAttribute("user", user);
             model.addAttribute("total", cartService.getTotal(user.getUserId()));
             model.addAttribute("cartSize", cartService.getCartSizeByUserId(user.getUserId()));

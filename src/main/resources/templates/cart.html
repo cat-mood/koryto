@@ -68,10 +68,15 @@
                 <h3>Total:</h3>
                 <h3 th:text="'$' + ${total}">Total</h3>
             </div>
-            <script th:inline="javascript">
-                const parts = /*[[${parts}]]*/ [];
-            </script>
-            <button class="checkout-btn" th:attr="onclick=|createOrder(${total})|">Proceed to Checkout</button>
+<!--            <script th:inline="javascript">-->
+<!--                const parts = /*[[${parts}]]*/ [];-->
+<!--            </script>-->
+            <button
+                    class="checkout-btn"
+                    th:attr="data-total=${total}, data-items=${#json.toJson(parts.getItems())}"
+                    onclick="proceedToCheckout(this)">
+                Proceed to Checkout
+            </button>
         </div>
     </div>
 </main>

@@ -63,7 +63,22 @@ async function deletePart(partId) {
     location.reload();
 }
 
-async function createOrder(cost) {
+function proceedToCheckout(button) {
+    const cost = parseFloat(button.dataset.total);
+
+    // Преобразуем HTML-escaped JSON обратно в нормальный вид
+    const rawItems = button.dataset.items;
+    const jsonString = rawItems.replace(/&quot;/g, '"');
+    const items = JSON.parse(jsonString);
+
+    console.log("Total cost:", cost);
+    console.log("Items:", items);
+
+    // Далее вызываешь свою логику
+    createOrder(cost, items);
+}
+
+async function createOrder(cost, parts) {
     console.log(parts);
     await fetch(
         'http://localhost:8080/api/orders/create-order', {
@@ -80,19 +95,32 @@ async function createOrder(cost) {
         const orderId = await response.json();
         console.log(`orderId: ${orderId}`);
         await createOrderBody(orderId, parts);
+        await clearCart();
     }).catch(error => console.error(error));
 
     location.reload();
 }
 
+async function clearCart() {
+    await fetch(
+        'http://localhost:8080/api/cart/clear-cart', {
+            method: 'POST'
+        }
+    ).then(response => {
+        if (!response.ok) throw new Error("Ошибка очистки корзины");
+    }).catch(error => console.error(error));
+}
+
 async function createOrderBody(orderId, parts) {
     const orderBody = [];
-    parts.forEach(part => {
+    // console.log(parts);
+    Object.entries(parts).forEach(([key, part]) => {
+        console.log(key, part);
         orderBody.push({
-            'orderId': orderId,
-            'partId': part.partId,
-            'amount': part.amount
-        })
+            orderId: orderId,
+            partId: part.partId,
+            amount: part.amount
+        });
     });
 
     await fetch(

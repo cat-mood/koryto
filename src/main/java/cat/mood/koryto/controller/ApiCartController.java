@@ -52,6 +52,17 @@ public class ApiCartController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/clear-cart")
+    public ResponseEntity<String> clearCart(@AuthenticationPrincipal User user) {
+        try {
+            cartService.clearCart(user.getUserId());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/get-total")
     public ResponseEntity<String> getCartTotalByUserId(@RequestParam int id) {
         double total = 0;
