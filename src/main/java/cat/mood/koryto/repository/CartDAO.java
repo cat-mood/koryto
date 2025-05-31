@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,6 +28,9 @@ public class CartDAO {
     final RedisTemplate<String, Object> redisTemplate;
     static final String CART_PREFIX = "cart:";
     final PartDAO partDAO;
+
+    final int TIMEOUT = 30;
+    TimeUnit TIMEUNIT = TimeUnit.MINUTES;
 
     public Cart getCart(int userId) {
         String key = CART_PREFIX + userId;
@@ -67,12 +71,12 @@ public class CartDAO {
 
         log.debug("Current items in cart after update: {}", items);
         // Сохраняем обновленную корзину
-        redisTemplate.opsForValue().set(key, current);
+        redisTemplate.opsForValue().set(key, current, TIMEOUT, TIMEUNIT);
     }
 
     public void update(Cart cart) {
         String key = CART_PREFIX + cart.getUserId();
-        redisTemplate.opsForValue().set(key, cart);
+        redisTemplate.opsForValue().set(key, cart, TIMEOUT, TIMEUNIT);
     }
 
     public void delete(int partId, int userId) {
